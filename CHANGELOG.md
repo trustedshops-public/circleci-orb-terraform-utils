@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/trustedshops-public/circleci-orb-terraform-utils/compare/1.2.0...1.3.0) (2021-11-16)
+
+
+### Features
+
+* Add attach workspace and checkout parameter to terraform apply job ([ee578c5](https://github.com/trustedshops-public/circleci-orb-terraform-utils/commit/ee578c53f3e77c29f2f310e6ed042bcd2bf166e4))
+
 # [1.2.0](https://github.com/trustedshops-public/circleci-orb-terraform-utils/compare/1.1.1...1.2.0) (2021-11-16)
 
 
