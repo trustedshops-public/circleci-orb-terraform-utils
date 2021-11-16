@@ -39,6 +39,10 @@ parameters:
     type: steps
     description: Steps to execute after applying terraform code
     default: [ ]
+  rewrite-github-clone-url:
+    type: boolean
+    default: false
+    description: Rewrite git urls for github to use https with env var GITHUB_TOKEN
 
 steps:
   - checkout
@@ -55,6 +59,16 @@ steps:
             path: <<parameters.path>>
             cli-config-file: <<parameters.cli-config-file>>
             var-file: <<parameters.var-file>>
+  - when:
+      condition:
+        and:
+          - equal: [ <<parameters.rewrite-github-clone-url>>, true ]
+      steps:
+        - run:
+            name: Set github token in github urls for module pull
+            command: |
+              git config --global url.https://${GITHUB_TOKEN}@github.com/.insteadOf https://github.com/
+              git config --global url.https://${GITHUB_TOKEN}@github.com/.insteadOf ssh://git@github.com/
   - unless:
       condition:
         and:
