@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/trustedshops-public/circleci-orb-terraform-utils/compare/1.1.0...1.1.1) (2021-11-16)
+
+
+### Bug Fixes
+
+* Run tfenv install independent from terraform commands ([36abbd6](https://github.com/trustedshops-public/circleci-orb-terraform-utils/commit/36abbd6b0b182309cf3532e5762b5366f638745a))
+
 # [1.1.0](https://github.com/trustedshops-public/circleci-orb-terraform-utils/compare/1.0.2...1.1.0) (2021-11-16)
 
 
