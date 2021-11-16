@@ -1,0 +1,70 @@
+description: >
+  Apply a terraform module
+
+executor: default
+
+environment:
+  TF_IN_AUTOMATION: 1
+
+parameters:
+  tfenv-version:
+    description: Version of the tfenv to install
+    default: none
+    type: string
+  terrastate-version:
+    description: Version of terrastate to install
+    default: none
+    type: string
+  terraform-version:
+    description: Verion of terraform to install
+    default: none
+    type: string
+  path:
+    description: Path to terraform module
+    default: .
+    type: string
+  var-file:
+    default: vars.tfvars
+    description: Variable file to use
+    type: string
+  cli-config-file:
+    default: ''
+    description: Path to terraform cli config file
+    type: string
+  pre-steps:
+    type: steps
+    description: Steps to execute before applying terraform code
+    default: []
+  post-steps:
+    type: steps
+    description: Steps to execute after applying terraform code
+    default: []
+
+steps:
+  - checkout
+  - install-tools:
+      tfenv-version: <<parameter.tfenv-version>>
+      terrastate-version: <<parameter.terrastate-version>>
+      terraform-version: <<parameter.terraform-version>>
+      path: <<parameter.path>>
+  - unless:
+      condition:
+        and:
+          - equal: [ <<parameters.terrastate-version>>, "none" ]
+      steps:
+        - terrastate-init:
+            version: <<parameters.terrastate-version>>
+            cli-config-file: <<parameters.cli-config-file>>
+  - terraform/init:
+      path: <<parameters.path>>
+      cli_config_file: <<parameters.cli-config-file>>
+  - terraform/plan:
+      path: <<parameters.path>>
+      cli_config_file: <<parameters.cli-config-file>>
+      var_file: <<parameters.var-file>>
+  - <<parameters.pre-steps>>
+  - terraform/apply:
+      path: <<parameters.path>>
+      cli_config_file: <<parameters.cli-config-file>>
+      var_file: <<parameters.var-file>>
+  - <<parameters.post-steps>>

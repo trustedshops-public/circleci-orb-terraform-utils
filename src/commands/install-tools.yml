@@ -1,0 +1,39 @@
+description: >
+  Install all required terraform tools in a single command
+
+parameters:
+  tfenv-version:
+    description: Version of the tfenv to install
+    default: none
+    type: string
+  terrastate-version:
+    description: Version of terrastate to install
+    default: none
+    type: string
+  terraform-version:
+    description: Verion of terraform to install
+    default: none
+    type: string
+
+steps:
+  - unless:
+      condition:
+        and:
+          - equal: [ <<parameters.tfenv-version>>, "none" ]
+      steps:
+        - install-tfenv:
+            version: <<parameters.tfenv-version>>
+  - unless:
+      condition:
+        and:
+          - equal: [ <<parameters.terrastate-version>>, "none" ]
+      steps:
+        - install-terrastate:
+            version: <<parameters.terrastate-version>>
+  - unless:
+      condition:
+        and:
+          - equal: [ <<parameters.terraform-version>>, "none" ]
+      steps:
+        - terraform/install:
+            terraform_version: <<parameters.terraform-version>>

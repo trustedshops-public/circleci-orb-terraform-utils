@@ -1,0 +1,22 @@
+description: Terraform job using tfenv and terrastate
+usage:
+  version: 2.1
+  orbs:
+    terraform-utils: trustedshops-public/terraform-utils@<version>
+  workflows:
+    version: 2
+    continious:
+      jobs:
+        - terraform-utils/terraform-apply:
+            name: deploy-prod
+            tfenv-version: v2.2.2
+            terrastate-version: 1.10.0
+            path: terraform
+            var-file: vars/prod.tfvars
+            post-steps:
+              - run:
+                  name: Notify about deployment
+                  command: .circleci/notify-deployment.sh prod
+            filters:
+              branches:
+                only: [ main ]

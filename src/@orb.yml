@@ -1,0 +1,11 @@
+version: 2.1
+
+orbs:
+  terraform: circleci/terraform@3.0.0
+
+description: |
+  Terraform utils
+
+display:
+  home_url: "https://github.com/trustedshops-public/circleci-orb-terraform-utils"
+  source_url: "https://github.com/trustedshops-public/circleci-orb-terraform-utils"

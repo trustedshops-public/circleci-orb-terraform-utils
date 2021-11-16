@@ -1,0 +1,16 @@
+description: >
+  Install tfenv
+
+parameters:
+  version:
+    type: string
+    description: Version of tfenv to install
+    default: v2.2.2
+
+steps:
+  - run:
+      name: Install tfenv
+      command: |
+        git clone https://github.com/tfutils/tfenv.git --depth=1 --branch <<parameters.version>> ~/.tfenv
+        echo 'export PATH="$HOME/.tfenv/bin:$PATH"' >> $BASH_ENV
+        tfenv --version
