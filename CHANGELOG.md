@@ -1,3 +1,10 @@
+## [1.0.2](https://github.com/trustedshops-public/circleci-orb-terraform-utils/compare/1.0.1...1.0.2) (2021-11-16)
+
+
+### Bug Fixes
+
+* Source tfenv before checking version ([bc05c21](https://github.com/trustedshops-public/circleci-orb-terraform-utils/commit/bc05c21e659bd434e4cfe7428cfa1a05e4fcddc1))
+
 ## [1.0.1](https://github.com/trustedshops-public/circleci-orb-terraform-utils/compare/1.0.0...1.0.1) (2021-11-16)
 
 
