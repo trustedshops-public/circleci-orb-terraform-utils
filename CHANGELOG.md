@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/trustedshops-public/circleci-orb-terraform-utils/compare/1.1.1...1.2.0) (2021-11-16)
+
+
+### Features
+
+* Add github token module url rewrite ([bf4ff22](https://github.com/trustedshops-public/circleci-orb-terraform-utils/commit/bf4ff2297748dd6ec8d22f09ad66aae4ad016327))
+
 ## [1.1.1](https://github.com/trustedshops-public/circleci-orb-terraform-utils/compare/1.1.0...1.1.1) (2021-11-16)
 
 
