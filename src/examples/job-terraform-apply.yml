@@ -13,7 +13,7 @@ usage:
             terrastate-version: 1.10.0
             path: terraform
             var-file: vars/prod.tfvars
-            post-steps:
+            post-apply-steps:
               - run:
                   name: Notify about deployment
                   command: .circleci/notify-deployment.sh prod

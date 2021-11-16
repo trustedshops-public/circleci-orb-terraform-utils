@@ -31,11 +31,11 @@ parameters:
     default: ''
     description: Path to terraform cli config file
     type: string
-  pre-steps:
+  pre-apply-steps:
     type: steps
     description: Steps to execute before applying terraform code
     default: []
-  post-steps:
+  post-apply-steps:
     type: steps
     description: Steps to execute after applying terraform code
     default: []
@@ -43,18 +43,18 @@ parameters:
 steps:
   - checkout
   - install-tools:
-      tfenv-version: <<parameter.tfenv-version>>
-      terrastate-version: <<parameter.terrastate-version>>
-      terraform-version: <<parameter.terraform-version>>
-      path: <<parameter.path>>
+      tfenv-version: <<parameters.tfenv-version>>
+      terrastate-version: <<parameters.terrastate-version>>
+      terraform-version: <<parameters.terraform-version>>
   - unless:
       condition:
         and:
           - equal: [ <<parameters.terrastate-version>>, "none" ]
       steps:
         - terrastate-init:
-            version: <<parameters.terrastate-version>>
+            path: <<parameters.path>>
             cli-config-file: <<parameters.cli-config-file>>
+            var-file: <<parameters.var-file>>
   - terraform/init:
       path: <<parameters.path>>
       cli_config_file: <<parameters.cli-config-file>>
@@ -62,9 +62,9 @@ steps:
       path: <<parameters.path>>
       cli_config_file: <<parameters.cli-config-file>>
       var_file: <<parameters.var-file>>
-  - <<parameters.pre-steps>>
+  - <<parameters.pre-apply-steps>>
   - terraform/apply:
       path: <<parameters.path>>
       cli_config_file: <<parameters.cli-config-file>>
       var_file: <<parameters.var-file>>
-  - <<parameters.post-steps>>
+  - <<parameters.post-apply-steps>>
