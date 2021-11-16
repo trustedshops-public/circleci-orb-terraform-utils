@@ -15,3 +15,5 @@ steps:
         echo 'export PATH="$HOME/.tfenv/bin:$PATH"' >> $BASH_ENV
         source $BASH_ENV
         tfenv --version
+        # allow implicit tfenv install
+        tfenv install latest
