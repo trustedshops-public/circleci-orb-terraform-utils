@@ -43,9 +43,32 @@ parameters:
     type: boolean
     default: false
     description: Rewrite git urls for github to use https with env var GITHUB_TOKEN
+  attach-workspace:
+    default: true
+    description: >
+      Boolean for whether or not to attach to an existing workspace.
+    type: boolean
+  checkout:
+    default: true
+    description: >
+      Boolean for whether or not to checkout sources
+    type: boolean
+  workspace-root:
+    default: .
+    description: >
+      Workspace root path that is either an absolute path or a path relative to the working directory.
+    type: string
 
 steps:
-  - checkout
+  - when:
+      condition: <<parameters.checkout>>
+      steps:
+        - checkout
+  - when:
+      condition: <<parameters.attach-workspace>>
+      steps:
+        - attach_workspace:
+            at: <<parameters.workspace-root>>
   - install-tools:
       tfenv-version: <<parameters.tfenv-version>>
       terrastate-version: <<parameters.terrastate-version>>
@@ -60,9 +83,7 @@ steps:
             cli-config-file: <<parameters.cli-config-file>>
             var-file: <<parameters.var-file>>
   - when:
-      condition:
-        and:
-          - equal: [ <<parameters.rewrite-github-clone-url>>, true ]
+      condition: <<parameters.rewrite-github-clone-url>>
       steps:
         - run:
             name: Set github token in github urls for module pull
