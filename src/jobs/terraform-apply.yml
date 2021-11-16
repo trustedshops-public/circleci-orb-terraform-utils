@@ -34,11 +34,11 @@ parameters:
   pre-apply-steps:
     type: steps
     description: Steps to execute before applying terraform code
-    default: []
+    default: [ ]
   post-apply-steps:
     type: steps
     description: Steps to execute after applying terraform code
-    default: []
+    default: [ ]
 
 steps:
   - checkout
@@ -55,6 +55,16 @@ steps:
             path: <<parameters.path>>
             cli-config-file: <<parameters.cli-config-file>>
             var-file: <<parameters.var-file>>
+  - unless:
+      condition:
+        and:
+          - equal: [ <<parameters.tfenv-version>>, "none" ]
+      steps:
+        - run:
+            name: Install terraform version for module
+            command: |
+              cd <<parameters.path>>
+              tfenv install && tfenv use
   - terraform/init:
       path: <<parameters.path>>
       cli_config_file: <<parameters.cli-config-file>>
