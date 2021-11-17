@@ -9,9 +9,14 @@ usage:
       jobs:
         - terraform-utils/terraform-apply:
             name: deploy-prod
-            terraform-version: 1.0.11
+            tfenv-version: v2.2.2
+            terrastate-version: 1.10.0
             path: terraform
             var-file: vars/prod.tfvars
+            post-apply-steps:
+              - run:
+                  name: Notify about deployment
+                  command: .circleci/notify-deployment.sh prod
             filters:
               branches:
                 only: [ main ]
