@@ -1,3 +1,10 @@
+# [1.5.0](https://github.com/trustedshops-public/circleci-orb-terraform-utils/compare/1.4.0...1.5.0) (2021-11-17)
+
+
+### Features
+
+* Add example jobs for tfenv and plain terraform versions ([88efa1f](https://github.com/trustedshops-public/circleci-orb-terraform-utils/commit/88efa1fe25da2f4c5cda05812782d2438bac05ab))
+
 # [1.4.0](https://github.com/trustedshops-public/circleci-orb-terraform-utils/compare/1.3.0...1.4.0) (2021-11-16)
 
 
