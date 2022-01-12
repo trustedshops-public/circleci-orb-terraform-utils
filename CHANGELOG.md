@@ -1,3 +1,10 @@
+# [1.6.0](https://github.com/trustedshops-public/circleci-orb-terraform-utils/compare/1.5.0...1.6.0) (2022-01-12)
+
+
+### Features
+
+* **#1:** Add circleci ip range support ([#2](https://github.com/trustedshops-public/circleci-orb-terraform-utils/issues/2)) ([14dce9c](https://github.com/trustedshops-public/circleci-orb-terraform-utils/commit/14dce9c17392c25a1b007fdf4b1735cd8928f141)), closes [#1](https://github.com/trustedshops-public/circleci-orb-terraform-utils/issues/1) [#1](https://github.com/trustedshops-public/circleci-orb-terraform-utils/issues/1) [#1](https://github.com/trustedshops-public/circleci-orb-terraform-utils/issues/1)
+
 # [1.5.0](https://github.com/trustedshops-public/circleci-orb-terraform-utils/compare/1.4.0...1.5.0) (2021-11-17)
 
 
