@@ -1,0 +1,17 @@
+description: Terraform job using tfenv and terrastate
+usage:
+  version: 2.1
+  orbs:
+    terraform-utils: trustedshops-public/terraform-utils@<version>
+  workflows:
+    version: 2
+    continious:
+      jobs:
+        - terraform-utils/terraform-apply-with-circleci-ip-range:
+            name: deploy-prod
+            terraform-version: 1.0.11
+            path: terraform
+            var-file: vars/prod.tfvars
+            filters:
+              branches:
+                only: [ main ]

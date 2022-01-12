@@ -6,6 +6,8 @@ executor: default
 environment:
   TF_IN_AUTOMATION: 1
 
+circleci_ip_ranges: true
+
 parameters:
   tfenv-version:
     description: Version of the tfenv to install
@@ -58,10 +60,6 @@ parameters:
     description: >
       Workspace root path that is either an absolute path or a path relative to the working directory.
     type: string
-  use-circleci-ip-ranges:
-    default: false
-    type: boolean
-    description: Should the job use circleci IP ranges?
 
 steps:
   - when:
