@@ -58,10 +58,6 @@ parameters:
     description: >
       Workspace root path that is either an absolute path or a path relative to the working directory.
     type: string
-  use-circleci-ip-ranges:
-    default: false
-    type: boolean
-    description: Should the job use circleci IP ranges?
 
 steps:
   - when:
