@@ -1,3 +1,10 @@
+# [1.7.0](https://github.com/trustedshops-public/circleci-orb-terraform-utils/compare/1.6.0...1.7.0) (2022-09-20)
+
+
+### Features
+
+* Add possibility to execute custom steps pre- and post-init ([#3](https://github.com/trustedshops-public/circleci-orb-terraform-utils/issues/3)) ([9609cec](https://github.com/trustedshops-public/circleci-orb-terraform-utils/commit/9609cecae2664a17e191a67f1db2d64026fe2da8))
+
 # [1.6.0](https://github.com/trustedshops-public/circleci-orb-terraform-utils/compare/1.5.0...1.6.0) (2022-01-12)
 
 
