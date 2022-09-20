@@ -3,6 +3,9 @@ description: >
 
 executor: default
 
+environment:
+  TF_IN_AUTOMATION: 1
+
 circleci_ip_ranges: true
 
 parameters:

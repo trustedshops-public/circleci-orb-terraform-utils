@@ -3,6 +3,9 @@ description: >
 
 executor: default
 
+environment:
+  TF_IN_AUTOMATION: 1
+
 parameters:
   tfenv-version:
     description: Version of the tfenv to install
