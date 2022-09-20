@@ -1,10 +1,7 @@
 description: >
-  Apply a terraform module
+  Provision a terraform module with circleci ip range
 
 executor: default
-
-environment:
-  TF_IN_AUTOMATION: 1
 
 parameters:
   tfenv-version:
@@ -39,6 +36,14 @@ parameters:
     type: steps
     description: Steps to execute after applying terraform code
     default: [ ]
+  pre-init-steps:
+    type: steps
+    description: Steps to execute before initializing terraform
+    default: [ ]
+  post-init-steps:
+    type: steps
+    description: Steps to execute after initializing terraform code
+    default: [ ]
   rewrite-github-clone-url:
     type: boolean
     default: false
@@ -60,56 +65,18 @@ parameters:
     type: string
 
 steps:
-  - when:
-      condition: <<parameters.checkout>>
-      steps:
-        - checkout
-  - when:
-      condition: <<parameters.attach-workspace>>
-      steps:
-        - attach_workspace:
-            at: <<parameters.workspace-root>>
-  - install-tools:
+  - provision:
       tfenv-version: <<parameters.tfenv-version>>
       terrastate-version: <<parameters.terrastate-version>>
       terraform-version: <<parameters.terraform-version>>
-  - unless:
-      condition:
-        and:
-          - equal: [ <<parameters.terrastate-version>>, "none" ]
-      steps:
-        - terrastate-init:
-            path: <<parameters.path>>
-            cli-config-file: <<parameters.cli-config-file>>
-            var-file: <<parameters.var-file>>
-  - when:
-      condition: <<parameters.rewrite-github-clone-url>>
-      steps:
-        - run:
-            name: Set github token in github urls for module pull
-            command: |
-              git config --global url.https://${GITHUB_TOKEN}@github.com/.insteadOf https://github.com/
-              git config --global url.https://${GITHUB_TOKEN}@github.com/.insteadOf ssh://git@github.com/
-  - unless:
-      condition:
-        and:
-          - equal: [ <<parameters.tfenv-version>>, "none" ]
-      steps:
-        - run:
-            name: Install terraform version for module
-            command: |
-              cd <<parameters.path>>
-              tfenv install && tfenv use
-  - terraform/init:
       path: <<parameters.path>>
-      cli_config_file: <<parameters.cli-config-file>>
-  - terraform/plan:
-      path: <<parameters.path>>
-      cli_config_file: <<parameters.cli-config-file>>
-      var_file: <<parameters.var-file>>
-  - <<parameters.pre-apply-steps>>
-  - terraform/apply:
-      path: <<parameters.path>>
-      cli_config_file: <<parameters.cli-config-file>>
-      var_file: <<parameters.var-file>>
-  - <<parameters.post-apply-steps>>
+      var-file: <<parameters.var-file>>
+      cli-config-file: <<parameters.cli-config-file>>
+      pre-apply-steps: <<parameters.pre-apply-steps>>
+      post-apply-steps: <<parameters.post-apply-steps>>
+      pre-init-steps: <<parameters.pre-init-steps>>
+      post-init-steps: <<parameters.post-init-steps>>
+      rewrite-github-clone-url: <<parameters.rewrite-github-clone-url>>
+      attach-workspace: <<parameters.attach-workspace>>
+      checkout: <<parameters.checkout>>
+      workspace-root: <<parameters.workspace-root>>
