@@ -11,6 +11,6 @@ steps:
   - run:
       name: Install terrastate
       command: |
-        sudo curl -L -o /usr/bin/terrastate https://github.com/janritter/terrastate/releases/download/1.10.0/linux_amd64_terrastate
+        sudo curl -L -o /usr/bin/terrastate https://github.com/janritter/terrastate/releases/download/2.0.0/linux_amd64_terrastate
         sudo chmod +x /usr/bin/terrastate
         terrastate version
