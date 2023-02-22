@@ -1,3 +1,10 @@
+## [1.7.1](https://github.com/trustedshops-public/circleci-orb-terraform-utils/compare/1.7.0...1.7.1) (2023-02-22)
+
+
+### Bug Fixes
+
+* updated to latest terrastate version ([2dab7da](https://github.com/trustedshops-public/circleci-orb-terraform-utils/commit/2dab7da7297370e9cdb410642fa78b05f4703509))
+
 # [1.7.0](https://github.com/trustedshops-public/circleci-orb-terraform-utils/compare/1.6.0...1.7.0) (2022-09-20)
 
 
