@@ -1,3 +1,10 @@
+## [1.8.0](https://github.com/trustedshops-public/circleci-orb-terraform-utils/compare/1.7.1...1.8.0) (2023-02-28)
+
+
+### Features
+
+* Update python cimg ([a53f4b9](https://github.com/trustedshops-public/circleci-orb-terraform-utils/commit/a53f4b952175078c3559bfdec98fb6d0b2f33bf9))
+
 ## [1.7.1](https://github.com/trustedshops-public/circleci-orb-terraform-utils/compare/1.7.0...1.7.1) (2023-02-22)
 
 
