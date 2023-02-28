@@ -5,7 +5,7 @@
   ],
   "regexManagers": [
     {
-      "fileMatch": [".*yml$"],
+      "fileMatch": ["^src\/.*yml$"],
       "matchStrings": [
         "datasource=(?<datasource>.*?) depName=(?<depName>.*?)( versioning=(?<versioning>.*?))?\\sdefault: (?<currentValue>.*)\\s"
       ],
