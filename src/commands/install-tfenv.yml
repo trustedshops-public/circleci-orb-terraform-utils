@@ -5,6 +5,7 @@ parameters:
   version:
     type: string
     description: Version of tfenv to install
+    # renovate: datasource=github-releases depName=tfutils/tfenv
     default: v2.2.2
 
 steps:
