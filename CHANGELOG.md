@@ -1,3 +1,15 @@
+## [2.0.0](https://github.com/trustedshops-public/circleci-orb-terraform-utils/compare/1.8.0...2.0.0) (2023-02-28)
+
+
+### ⚠ BREAKING CHANGES
+
+* **deps:** Major update of tfenv can break things
+
+### Bug Fixes
+
+* **deps:** update dependency tfutils/tfenv to v2.2.3 ([#12](https://github.com/trustedshops-public/circleci-orb-terraform-utils/issues/12)) ([44d5527](https://github.com/trustedshops-public/circleci-orb-terraform-utils/commit/44d5527e7780b6743354fc1ef23c5ea392e5b905))
+* **deps:** update dependency tfutils/tfenv to v3 ([#13](https://github.com/trustedshops-public/circleci-orb-terraform-utils/issues/13)) ([ad34f25](https://github.com/trustedshops-public/circleci-orb-terraform-utils/commit/ad34f256f730947af2009c1d82ab42472be7828d))
+
 ## [1.8.0](https://github.com/trustedshops-public/circleci-orb-terraform-utils/compare/1.7.1...1.8.0) (2023-02-28)
 
 
