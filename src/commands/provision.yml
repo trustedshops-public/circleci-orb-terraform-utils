@@ -2,15 +2,15 @@ description: >
   Provision (apply) terraform module
 
 parameters:
-  tfenv-version:
+  tfenv_version:
     description: Version of the tfenv to install
     default: none
     type: string
-  terrastate-version:
+  terrastate_version:
     description: Version of terrastate to install
     default: none
     type: string
-  terraform-version:
+  terraform_version:
     description: Verion of terraform to install
     default: none
     type: string
@@ -18,35 +18,35 @@ parameters:
     description: Path to terraform module
     default: .
     type: string
-  var-file:
+  var_file:
     default: vars.tfvars
     description: Variable file to use
     type: string
-  cli-config-file:
+  cli_config_file:
     default: ''
     description: Path to terraform cli config file
     type: string
-  pre-apply-steps:
+  pre_apply_steps:
     type: steps
     description: Steps to execute before applying terraform code
     default: [ ]
-  post-apply-steps:
+  post_apply_steps:
     type: steps
     description: Steps to execute after applying terraform code
     default: [ ]
-  pre-init-steps:
+  pre_init_steps:
     type: steps
     description: Steps to execute before initializing terraform
     default: [ ]
-  post-init-steps:
+  post_init_steps:
     type: steps
     description: Steps to execute after initializing terraform code
     default: [ ]
-  rewrite-github-clone-url:
+  rewrite_github_clone_url:
     type: boolean
     default: false
     description: Rewrite git urls for github to use https with env var GITHUB_TOKEN
-  attach-workspace:
+  attach_workspace:
     default: true
     description: >
       Boolean for whether or not to attach to an existing workspace.
@@ -56,7 +56,7 @@ parameters:
     description: >
       Boolean for whether or not to checkout sources
     type: boolean
-  workspace-root:
+  workspace_root:
     default: .
     description: >
       Workspace root path that is either an absolute path or a path relative to the working directory.
@@ -68,25 +68,25 @@ steps:
       steps:
         - checkout
   - when:
-      condition: <<parameters.attach-workspace>>
+      condition: <<parameters.attach_workspace>>
       steps:
         - attach_workspace:
-            at: <<parameters.workspace-root>>
-  - install-tools:
-      tfenv-version: <<parameters.tfenv-version>>
-      terrastate-version: <<parameters.terrastate-version>>
-      terraform-version: <<parameters.terraform-version>>
+            at: <<parameters.workspace_root>>
+  - install_tools:
+      tfenv_version: <<parameters.tfenv_version>>
+      terrastate_version: <<parameters.terrastate_version>>
+      terraform_version: <<parameters.terraform_version>>
   - unless:
       condition:
         and:
-          - equal: [ <<parameters.terrastate-version>>, "none" ]
+          - equal: [ <<parameters.terrastate_version>>, "none" ]
       steps:
         - terrastate-init:
             path: <<parameters.path>>
-            cli-config-file: <<parameters.cli-config-file>>
-            var-file: <<parameters.var-file>>
+            cli_config_file: <<parameters.cli_config_file>>
+            var_file: <<parameters.var_file>>
   - when:
-      condition: <<parameters.rewrite-github-clone-url>>
+      condition: <<parameters.rewrite_github_clone_url>>
       steps:
         - run:
             name: Set github token in github urls for module pull
@@ -96,25 +96,25 @@ steps:
   - unless:
       condition:
         and:
-          - equal: [ <<parameters.tfenv-version>>, "none" ]
+          - equal: [ <<parameters.tfenv_version>>, "none" ]
       steps:
         - run:
             name: Install terraform version for module
             command: |
               cd <<parameters.path>>
               tfenv install && tfenv use
-  - <<parameters.pre-init-steps>>
+  - <<parameters.pre_init_steps>>
   - terraform/init:
       path: <<parameters.path>>
-      cli_config_file: <<parameters.cli-config-file>>
-  - <<parameters.post-init-steps>>
+      cli_config_file: <<parameters.cli_config_file>>
+  - <<parameters.post_init_steps>>
   - terraform/plan:
       path: <<parameters.path>>
-      cli_config_file: <<parameters.cli-config-file>>
-      var_file: <<parameters.var-file>>
-  - <<parameters.pre-apply-steps>>
+      cli_config_file: <<parameters.cli_config_file>>
+      var_file: <<parameters.var_file>>
+  - <<parameters.pre_apply_steps>>
   - terraform/apply:
       path: <<parameters.path>>
-      cli_config_file: <<parameters.cli-config-file>>
-      var_file: <<parameters.var-file>>
-  - <<parameters.post-apply-steps>>
+      cli_config_file: <<parameters.cli_config_file>>
+      var_file: <<parameters.var_file>>
+  - <<parameters.post_apply_steps>>
