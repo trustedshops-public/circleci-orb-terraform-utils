@@ -2,7 +2,7 @@ description: >
   Generate terrastate state file
 
 parameters:
-  cli-config-file:
+  cli_config_file:
     default: ''
     description: Path to terraform cli config file
     type: string
@@ -10,7 +10,7 @@ parameters:
     default: .
     description: Path to the terraform module
     type: string
-  var-file:
+  var_file:
     default: vars.tfvars
     description: Variable file to use
     type: string
@@ -20,4 +20,4 @@ steps:
       name: Initialize terrastate
       command: |
         cd <<parameters.path>>
-        terrastate --var-file <<parameters.var-file>>
+        terrastate --var-file <<parameters.var_file>>

@@ -7,11 +7,11 @@ usage:
     version: 2
     continious:
       jobs:
-        - terraform-utils/terraform-apply-with-circleci-ip-range:
+        - terraform-utils/terraform_apply_with_circleci_ip_range:
             name: deploy-prod
-            terraform-version: 1.0.11
+            terraform_version: 1.0.11
             path: terraform
-            var-file: vars/prod.tfvars
+            var_file: vars/prod.tfvars
             filters:
               branches:
                 only: [ main ]

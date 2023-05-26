@@ -7,11 +7,11 @@ usage:
     version: 2
     continious:
       jobs:
-        - terraform-utils/terraform-apply:
+        - terraform-utils/terraform_apply:
             name: deploy-prod
-            tfenv-version: v2.2.2
+            terraform_version: 1.0.11
             path: terraform
-            var-file: vars/prod.tfvars
+            var_file: vars/prod.tfvars
             filters:
               branches:
                 only: [ main ]
