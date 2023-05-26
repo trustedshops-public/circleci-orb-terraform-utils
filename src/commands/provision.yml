@@ -81,7 +81,7 @@ steps:
         and:
           - equal: [ <<parameters.terrastate_version>>, "none" ]
       steps:
-        - terrastate-init:
+        - terrastate_init:
             path: <<parameters.path>>
             cli_config_file: <<parameters.cli_config_file>>
             var_file: <<parameters.var_file>>
