@@ -1,3 +1,14 @@
+## [3.0.0](https://github.com/trustedshops-public/circleci-orb-terraform-utils/compare/2.0.0...3.0.0) (2023-06-07)
+
+
+### ⚠ BREAKING CHANGES
+
+* Migrate to orb tools v12
+
+### Code Refactoring
+
+* Migrate to orb tools v12 ([18c7c9f](https://github.com/trustedshops-public/circleci-orb-terraform-utils/commit/18c7c9f0a36e96c7499f88e9eec010af1762fef5))
+
 ## [3.0.0](https://github.com/trustedshops-public/circleci-orb-terraform-utils/compare/2.0.0...3.0.0) (2023-05-31)
 
 
