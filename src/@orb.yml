@@ -2,6 +2,7 @@ version: 2.1
 
 orbs:
   terraform: circleci/terraform@3.0.0
+  github-utils: trustedshops-public/github-utils@1.0.0
 
 description: |
   Terraform utils

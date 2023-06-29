@@ -88,11 +88,7 @@ steps:
   - when:
       condition: <<parameters.rewrite_github_clone_url>>
       steps:
-        - run:
-            name: Set github token in github urls for module pull
-            command: |
-              git config --global url.https://token:${GITHUB_TOKEN}@github.com/.insteadOf https://github.com/
-              git config --global url.https://token:${GITHUB_TOKEN}@github.com/.insteadOf ssh://git@github.com/
+        - github-utils/rewrite_urls_with_token
   - unless:
       condition:
         and:
