@@ -5,12 +5,12 @@ usage:
     terraform-utils: trustedshops-public/terraform-utils@<version>
   workflows:
     version: 2
-    continious:
+    continuous:
       jobs:
         - terraform-utils/terraform_apply:
             name: deploy-prod
-            tfenv_version: v2.2.2
-            terrastate_version: 1.10.0
+            tfenv_version: v3.0.0
+            terrastate_version: 2.0.0
             path: terraform
             var_file: vars/prod.tfvars
             post_apply_steps:

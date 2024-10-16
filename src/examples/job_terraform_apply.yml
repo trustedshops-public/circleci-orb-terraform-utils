@@ -5,11 +5,11 @@ usage:
     terraform-utils: trustedshops-public/terraform-utils@<version>
   workflows:
     version: 2
-    continious:
+    continuous:
       jobs:
         - terraform-utils/terraform_apply:
             name: deploy-prod
-            terraform_version: 1.0.11
+            terraform_version: 1.9.7
             path: terraform
             var_file: vars/prod.tfvars
             filters:
