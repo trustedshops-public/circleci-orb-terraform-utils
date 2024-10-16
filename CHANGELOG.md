@@ -1,3 +1,27 @@
+## [3.0.0](https://github.com/trustedshops-public/circleci-orb-terraform-utils/compare/2.0.0...3.0.0) (2024-10-16)
+
+
+### ⚠ BREAKING CHANGES
+
+* Migrate to orb tools v12
+
+### Features
+
+* update semantic-release orb ([704a255](https://github.com/trustedshops-public/circleci-orb-terraform-utils/commit/704a255939c2ca21ce7d0c25f4613e1274de9771))
+* update terraform orb ([bbe443f](https://github.com/trustedshops-public/circleci-orb-terraform-utils/commit/bbe443f3eea9d1f57148412a410219c80f2a3488))
+
+
+### Bug Fixes
+
+* Add github utils for url rewrite ([2a02196](https://github.com/trustedshops-public/circleci-orb-terraform-utils/commit/2a02196029635b9b879aac044f61e414c5addef1))
+* Add token as username to github access token ([cbb72c6](https://github.com/trustedshops-public/circleci-orb-terraform-utils/commit/cbb72c6af7bd8811cbfd97a31fb068e321daa603))
+* default pointing to non-existent version ([e84640e](https://github.com/trustedshops-public/circleci-orb-terraform-utils/commit/e84640eade67418dedb2ef6603b7fbcf64be880d))
+
+
+### Code Refactoring
+
+* Migrate to orb tools v12 ([18c7c9f](https://github.com/trustedshops-public/circleci-orb-terraform-utils/commit/18c7c9f0a36e96c7499f88e9eec010af1762fef5))
+
 ## [3.0.0](https://github.com/trustedshops-public/circleci-orb-terraform-utils/compare/2.0.0...3.0.0) (2024-09-23)
 
 
