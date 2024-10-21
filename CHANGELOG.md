@@ -1,3 +1,18 @@
+## [3.1.0](https://github.com/trustedshops-public/circleci-orb-terraform-utils/compare/3.0.0...3.1.0) (2024-10-21)
+
+
+### Features
+
+* update semantic-release orb ([704a255](https://github.com/trustedshops-public/circleci-orb-terraform-utils/commit/704a255939c2ca21ce7d0c25f4613e1274de9771))
+* update terraform orb ([bbe443f](https://github.com/trustedshops-public/circleci-orb-terraform-utils/commit/bbe443f3eea9d1f57148412a410219c80f2a3488))
+
+
+### Bug Fixes
+
+* broken terrastate download ([b4b630d](https://github.com/trustedshops-public/circleci-orb-terraform-utils/commit/b4b630d9d07d07189ef8a12f69a3c00d39e3c892))
+* broken terrastate download ([d3b70b5](https://github.com/trustedshops-public/circleci-orb-terraform-utils/commit/d3b70b57b63d369e86b0cc8802b05b606f7df432))
+* default pointing to non-existent version ([e84640e](https://github.com/trustedshops-public/circleci-orb-terraform-utils/commit/e84640eade67418dedb2ef6603b7fbcf64be880d))
+
 ## [3.0.0](https://github.com/trustedshops-public/circleci-orb-terraform-utils/compare/2.0.0...3.0.0) (2024-10-21)
 
 
