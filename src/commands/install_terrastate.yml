@@ -6,7 +6,7 @@ parameters:
     type: string
     description: Version of terrastate to install
     # renovate: datasource=github-releases depName=janritter/terrastate
-    default: 2.0.0
+    default: 2.0.2
 
 steps:
   - run:
