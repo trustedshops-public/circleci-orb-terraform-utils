@@ -1,3 +1,16 @@
+## [4.0.0](https://github.com/trustedshops-public/circleci-orb-terraform-utils/compare/3.1.0...4.0.0) (2026-03-24)
+
+
+### ⚠ BREAKING CHANGES
+
+* terrastate releases are now distributed as tar.gz archives instead of raw binaries. The install command now downloads and extracts the archive.
+
+Signed-off-by: Timo Krause <timo.krause@trustedshops.com>
+
+### Features
+
+* update terrastate to 2.2.1 with tar.gz release format ([8bf44b5](https://github.com/trustedshops-public/circleci-orb-terraform-utils/commit/8bf44b53070a7cd946231a42d78c281f43bf5833))
+
 ## [3.1.0](https://github.com/trustedshops-public/circleci-orb-terraform-utils/compare/3.0.0...3.1.0) (2024-10-21)
 
 
