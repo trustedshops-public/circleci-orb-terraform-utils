@@ -10,7 +10,7 @@ usage:
         - terraform-utils/terraform_apply:
             name: deploy-prod
             tfenv_version: v3.0.0
-            terrastate_version: 2.0.0
+            terrastate_version: 2.2.1
             path: terraform
             var_file: vars/prod.tfvars
             post_apply_steps:
