@@ -6,12 +6,15 @@ parameters:
     type: string
     description: Version of terrastate to install
     # renovate: datasource=github-releases depName=janritter/terrastate
-    default: 2.1.1
+    default: 2.2.1
 
 steps:
   - run:
       name: Install terrastate
       command: |
-        sudo curl -L -o /usr/bin/terrastate https://github.com/janritter/terrastate/releases/download/<<parameters.version>>/linux_amd64_terrastate
+        curl -L -o /tmp/terrastate.tar.gz https://github.com/janritter/terrastate/releases/download/<<parameters.version>>/terrastate_linux_amd64.tar.gz
+        tar -xzf /tmp/terrastate.tar.gz -C /tmp
+        sudo mv /tmp/terrastate /usr/bin/terrastate
         sudo chmod +x /usr/bin/terrastate
+        rm /tmp/terrastate.tar.gz
         terrastate version
