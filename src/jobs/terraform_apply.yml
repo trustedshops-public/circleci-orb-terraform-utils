@@ -16,7 +16,7 @@ parameters:
     default: none
     type: string
   terraform_version:
-    description: Verion of terraform to install
+    description: Version of terraform to install
     default: none
     type: string
   path:

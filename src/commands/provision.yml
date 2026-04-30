@@ -11,7 +11,7 @@ parameters:
     default: none
     type: string
   terraform_version:
-    description: Verion of terraform to install
+    description: Version of terraform to install
     default: none
     type: string
   path:
@@ -59,7 +59,8 @@ parameters:
   workspace_root:
     default: .
     description: >
-      Workspace root path that is either an absolute path or a path relative to the working directory.
+      Workspace root path that is either an absolute path or a path relative to
+      the working directory.
     type: string
 
 steps:
