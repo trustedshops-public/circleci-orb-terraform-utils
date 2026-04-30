@@ -1,5 +1,5 @@
 description: >
-  Provision a terraform module with circleci ip range
+  Provision a terraform module
 
 executor: default
 
@@ -64,7 +64,8 @@ parameters:
   workspace_root:
     default: .
     description: >
-      Workspace root path that is either an absolute path or a path relative to the working directory.
+      Workspace root path that is either an absolute path or a path relative to
+      the working directory.
     type: string
 
 steps:
