@@ -19,4 +19,4 @@ usage:
                   command: .circleci/notify-deployment.sh prod
             filters:
               branches:
-                only: [ main ]
+                only: [main]
