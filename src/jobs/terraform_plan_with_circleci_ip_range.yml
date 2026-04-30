@@ -1,0 +1,83 @@
+description: >
+  Plan a terraform module with circleci ip range
+
+executor: default
+
+environment:
+  TF_IN_AUTOMATION: 1
+
+circleci_ip_ranges: true
+
+parameters:
+  tfenv_version:
+    description: Version of the tfenv to install
+    default: none
+    type: string
+  terrastate_version:
+    description: Version of terrastate to install
+    default: none
+    type: string
+  terraform_version:
+    description: Version of terraform to install
+    default: none
+    type: string
+  path:
+    description: Path to terraform module
+    default: .
+    type: string
+  var_file:
+    default: vars.tfvars
+    description: Variable file to use
+    type: string
+  cli_config_file:
+    default: ''
+    description: Path to terraform cli config file
+    type: string
+  post_plan_steps:
+    type: steps
+    description: Steps to execute after planning terraform code
+    default: []
+  pre_init_steps:
+    type: steps
+    description: Steps to execute before initializing terraform
+    default: []
+  post_init_steps:
+    type: steps
+    description: Steps to execute after initializing terraform code
+    default: []
+  rewrite_github_clone_url:
+    type: boolean
+    default: false
+    description: Rewrite git urls for github to use https with env var GITHUB_TOKEN
+  attach_workspace:
+    default: true
+    description: >
+      Boolean for whether or not to attach to an existing workspace.
+    type: boolean
+  checkout:
+    default: true
+    description: >
+      Boolean for whether or not to checkout sources
+    type: boolean
+  workspace_root:
+    default: .
+    description: >
+      Workspace root path that is either an absolute path or a path relative to
+      the working directory.
+    type: string
+
+steps:
+  - plan:
+      tfenv_version: <<parameters.tfenv_version>>
+      terrastate_version: <<parameters.terrastate_version>>
+      terraform_version: <<parameters.terraform_version>>
+      path: <<parameters.path>>
+      var_file: <<parameters.var_file>>
+      cli_config_file: <<parameters.cli_config_file>>
+      post_plan_steps: <<parameters.post_plan_steps>>
+      pre_init_steps: <<parameters.pre_init_steps>>
+      post_init_steps: <<parameters.post_init_steps>>
+      rewrite_github_clone_url: <<parameters.rewrite_github_clone_url>>
+      attach_workspace: <<parameters.attach_workspace>>
+      checkout: <<parameters.checkout>>
+      workspace_root: <<parameters.workspace_root>>

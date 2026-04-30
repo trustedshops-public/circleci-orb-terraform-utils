@@ -1,0 +1,17 @@
+description: Terraform plan job using CircleCI IP ranges
+usage:
+  version: 2.1
+  orbs:
+    terraform-utils: trustedshops-public/terraform-utils@<version>
+  workflows:
+    version: 2
+    continuous:
+      jobs:
+        - terraform-utils/terraform_plan_with_circleci_ip_range:
+            name: plan-prod
+            terraform_version: 1.9.7
+            path: terraform
+            var_file: vars/prod.tfvars
+            filters:
+              branches:
+                only: [main]
