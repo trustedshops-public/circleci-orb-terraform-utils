@@ -8,3 +8,4 @@ formatter:
   eof_newline: true
   max_line_length: 200
   pad_line_comments: 2
+  drop_merge_tag: true

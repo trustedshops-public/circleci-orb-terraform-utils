@@ -74,25 +74,25 @@ workflows:
   continious:
     jobs:
       - orb-tools/lint:
-          !!merge <<: *filter_all
+          <<: *filter_all
       - orb-tools/pack:
-          !!merge <<: *filter_all
+          <<: *filter_all
       - shellcheck/check:
           dir: ./src/scripts
           exclude: SC2148
-          !!merge <<: *filter_all
+          <<: *filter_all
       - publish-dev:
-          !!merge <<: *require_tests
+          <<: *require_tests
           context:
             - circleci-orbs
       - publish:
-          !!merge <<: *require_tests
-          !!merge <<: *filter_tags
+          <<: *require_tests
+          <<: *filter_tags
           context:
             - circleci-orbs
       - semantic-release/with_changelog_github_config:
           name: semantic-release
-          !!merge <<: *require_tests
+          <<: *require_tests
           filters:
             branches:
               only:
