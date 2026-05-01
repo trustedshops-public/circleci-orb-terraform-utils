@@ -1,0 +1,116 @@
+description: >
+  Destroy a terraform module: install tools, initialise, destroy.
+
+  Runs `terraform destroy -auto-approve` directly (not against a saved
+  plan file). For a review-and-apply destroy flow, run terraform_plan
+  with a custom step that calls `terraform plan -destroy`, then apply
+  the persisted tfplan via terraform_apply.
+
+executor: default
+
+environment:
+  TF_IN_AUTOMATION: 1
+
+parameters:
+  tfenv_version:
+    description: Version of tfenv to install. Default "none" skips installation.
+    default: none
+    type: string
+  terrastate_version:
+    description: Version of terrastate to install. Default "none" skips installation.
+    default: none
+    type: string
+  terraform_version:
+    description: Version of terraform to install. Default "none" skips installation.
+    default: none
+    type: string
+  path:
+    description: Path to terraform module
+    default: .
+    type: string
+  var_file:
+    description: >
+      Variable file to pass via -var-file. When empty (default), the flag is
+      omitted entirely.
+    default: ''
+    type: string
+  cli_config_file:
+    description: Path to a terraform CLI config file
+    default: ''
+    type: string
+  pre_init_steps:
+    type: steps
+    description: Steps to execute before `terraform init`
+    default: []
+  pre_destroy_steps:
+    type: steps
+    description: Steps to execute after `terraform init` and before `terraform destroy`
+    default: []
+  post_destroy_steps:
+    type: steps
+    description: Steps to execute after `terraform destroy`
+    default: []
+  rewrite_github_clone_url:
+    type: boolean
+    default: false
+    description: Rewrite git urls for github to use https with env var GITHUB_TOKEN
+  attach_workspace:
+    default: true
+    description: Boolean for whether or not to attach to an existing workspace.
+    type: boolean
+  checkout:
+    default: true
+    description: Boolean for whether or not to checkout sources
+    type: boolean
+  workspace_root:
+    default: .
+    description: Workspace root path that is either an absolute path or a path relative to the working directory.
+    type: string
+
+steps:
+  - when:
+      condition: <<parameters.checkout>>
+      steps:
+        - checkout
+  - when:
+      condition: <<parameters.attach_workspace>>
+      steps:
+        - attach_workspace:
+            at: <<parameters.workspace_root>>
+  - install_tools:
+      tfenv_version: <<parameters.tfenv_version>>
+      terrastate_version: <<parameters.terrastate_version>>
+      terraform_version: <<parameters.terraform_version>>
+  - unless:
+      condition:
+        and:
+          - equal: [<<parameters.terrastate_version>>, "none"]
+      steps:
+        - terrastate_init:
+            path: <<parameters.path>>
+            cli_config_file: <<parameters.cli_config_file>>
+            var_file: <<parameters.var_file>>
+  - when:
+      condition: <<parameters.rewrite_github_clone_url>>
+      steps:
+        - github-utils/rewrite_urls_with_token
+  - unless:
+      condition:
+        and:
+          - equal: [<<parameters.tfenv_version>>, "none"]
+      steps:
+        - run:
+            name: Install terraform version for module
+            environment:
+              TFENV_PARAM_PATH: <<parameters.path>>
+            command: <<include(scripts/tfenv_install_module_version.sh)>>
+  - <<parameters.pre_init_steps>>
+  - init:
+      path: <<parameters.path>>
+      cli_config_file: <<parameters.cli_config_file>>
+  - <<parameters.pre_destroy_steps>>
+  - destroy:
+      path: <<parameters.path>>
+      var_file: <<parameters.var_file>>
+      cli_config_file: <<parameters.cli_config_file>>
+  - <<parameters.post_destroy_steps>>
