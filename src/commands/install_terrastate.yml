@@ -11,10 +11,6 @@ parameters:
 steps:
   - run:
       name: Install terrastate
-      command: |-
-        curl -L -o /tmp/terrastate.tar.gz https://github.com/janritter/terrastate/releases/download/<<parameters.version>>/terrastate_linux_amd64.tar.gz
-        tar -xzf /tmp/terrastate.tar.gz -C /tmp
-        sudo mv /tmp/terrastate /usr/bin/terrastate
-        sudo chmod +x /usr/bin/terrastate
-        rm /tmp/terrastate.tar.gz
-        terrastate version
+      environment:
+        TERRASTATE_PARAM_VERSION: <<parameters.version>>
+      command: <<include(scripts/install_terrastate.sh)>>

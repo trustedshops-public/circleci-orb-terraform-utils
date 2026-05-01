@@ -96,9 +96,10 @@ steps:
       steps:
         - run:
             name: Install terraform version for module
-            command: |
-              cd <<parameters.path>>
-              tfenv install && tfenv use
+            environment:
+              TFENV_PARAM_PATH: <<parameters.path>>
+            command: <<include(scripts/tfenv_install_module_version.sh)>>
+
   - <<parameters.pre_init_steps>>
   - terraform/init:
       path: <<parameters.path>>

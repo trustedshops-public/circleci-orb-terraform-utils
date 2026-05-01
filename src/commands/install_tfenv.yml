@@ -11,10 +11,6 @@ parameters:
 steps:
   - run:
       name: Install tfenv
-      command: |-
-        git clone https://github.com/tfutils/tfenv.git --depth=1 --branch <<parameters.version>> ~/.tfenv
-        echo 'export PATH="$HOME/.tfenv/bin:$PATH"' >> $BASH_ENV
-        source $BASH_ENV
-        tfenv --version
-        # allow implicit tfenv install
-        tfenv install latest
+      environment:
+        TFENV_PARAM_VERSION: <<parameters.version>>
+      command: <<include(scripts/install_tfenv.sh)>>
