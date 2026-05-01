@@ -1,0 +1,17 @@
+description: >
+  Save the terraform providers cache for a module. Keyed on the module's
+  .terraform.lock.hcl. Caches .terraform/providers and .terraform/modules
+  but explicitly excludes terraform.tfstate and other per-build state.
+
+parameters:
+  path:
+    description: Path to the terraform module containing .terraform.lock.hcl
+    default: .
+    type: string
+
+steps:
+  - save_cache:
+      key: tf-orb-providers-v1-{{ checksum "<<parameters.path>>/.terraform.lock.hcl" }}
+      paths:
+        - <<parameters.path>>/.terraform/providers
+        - <<parameters.path>>/.terraform/modules

@@ -48,6 +48,13 @@ parameters:
     type: boolean
     default: false
     description: Rewrite git urls for github to use https with env var GITHUB_TOKEN
+  enable_cache:
+    type: boolean
+    default: false
+    description: >
+      Cache terraform providers between builds. Requires
+      .terraform.lock.hcl to be committed in the module path. Projects
+      without a lockfile must keep enable_cache: false (the default).
   attach_workspace:
     default: true
     description: Boolean for whether or not to attach to an existing workspace.
@@ -99,9 +106,19 @@ steps:
               TFENV_PARAM_PATH: <<parameters.path>>
             command: <<include(scripts/tfenv_install_module_version.sh)>>
   - <<parameters.pre_init_steps>>
+  - when:
+      condition: <<parameters.enable_cache>>
+      steps:
+        - restore_provider_cache:
+            path: <<parameters.path>>
   - init:
       path: <<parameters.path>>
       cli_config_file: <<parameters.cli_config_file>>
+  - when:
+      condition: <<parameters.enable_cache>>
+      steps:
+        - save_provider_cache:
+            path: <<parameters.path>>
   - <<parameters.post_init_steps>>
   - persist_to_workspace:
       root: <<parameters.path>>
