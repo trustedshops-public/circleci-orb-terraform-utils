@@ -1,0 +1,12 @@
+description: Validate a terraform module on every PR as a fast static-check gate
+usage:
+  version: 2.1
+  orbs:
+    terraform-utils: trustedshops-public/terraform-utils@<version>
+  workflows:
+    pr_checks:
+      jobs:
+        - terraform-utils/terraform_validate:
+            name: validate
+            terraform_version: 1.10.5
+            path: terraform
