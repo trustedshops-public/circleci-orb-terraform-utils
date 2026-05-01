@@ -35,5 +35,5 @@ steps:
         and:
           - equal: [<<parameters.terraform_version>>, "none"]
       steps:
-        - terraform/install:
-            terraform_version: <<parameters.terraform_version>>
+        - install_terraform:
+            version: <<parameters.terraform_version>>
