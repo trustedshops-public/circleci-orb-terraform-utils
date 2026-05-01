@@ -2,12 +2,12 @@ description: >
   Default executor
 
 docker:
-  - image: 'cimg/python:<<parameters.tag>>'
+  - image: 'cimg/base:<<parameters.tag>>'
 
 parameters:
   tag:
-    default: "3.11.2"
+    default: "stable"
     description: >
-      Pick a specific circleci/base image variant:
-      https://hub.docker.com/r/cimg/python/tags
+      Pick a specific cimg/base image variant:
+      https://hub.docker.com/r/cimg/base/tags
     type: string
