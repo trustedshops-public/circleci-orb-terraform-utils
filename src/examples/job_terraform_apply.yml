@@ -14,4 +14,4 @@ usage:
             var_file: vars/prod.tfvars
             filters:
               branches:
-                only: [ main ]
+                only: [main]

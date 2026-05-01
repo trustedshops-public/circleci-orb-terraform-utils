@@ -18,6 +18,6 @@ parameters:
 steps:
   - run:
       name: Initialize terrastate
-      command: |
+      command: |-
         cd <<parameters.path>>
         terrastate --var-file <<parameters.var_file>>

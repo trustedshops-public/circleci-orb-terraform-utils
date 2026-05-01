@@ -36,19 +36,19 @@ parameters:
   pre_apply_steps:
     type: steps
     description: Steps to execute before applying terraform code
-    default: [ ]
+    default: []
   post_apply_steps:
     type: steps
     description: Steps to execute after applying terraform code
-    default: [ ]
+    default: []
   pre_init_steps:
     type: steps
     description: Steps to execute before initializing terraform
-    default: [ ]
+    default: []
   post_init_steps:
     type: steps
     description: Steps to execute after initializing terraform code
-    default: [ ]
+    default: []
   rewrite_github_clone_url:
     type: boolean
     default: false
