@@ -1,8 +1,7 @@
 description: >
-  Apply a terraform module: install tools, initialise, plan, apply.
-
-  Uses a saved plan (-out=tfplan) so apply applies exactly the plan that was
-  produced earlier in the same job, with no possibility of drift.
+  Plan a terraform module: install tools, initialise, plan. The resulting
+  tfplan file is persisted to the CircleCI workspace at <path>/tfplan so a
+  downstream job can apply exactly that plan (e.g. after manual approval).
 
 executor: default
 
@@ -29,8 +28,7 @@ parameters:
   var_file:
     description: >
       Variable file to pass via -var-file. When empty (default), the flag is
-      omitted entirely. Set explicitly to "vars.tfvars" for the previous
-      orb default behaviour.
+      omitted entirely.
     default: ''
     type: string
   cli_config_file:
@@ -45,13 +43,9 @@ parameters:
     type: steps
     description: Steps to execute after `terraform init` and before `terraform plan`
     default: []
-  pre_apply_steps:
+  post_plan_steps:
     type: steps
-    description: Steps to execute after `terraform plan` and before `terraform apply`
-    default: []
-  post_apply_steps:
-    type: steps
-    description: Steps to execute after `terraform apply`
+    description: Steps to execute after `terraform plan` and before persisting tfplan
     default: []
   rewrite_github_clone_url:
     type: boolean
@@ -116,9 +110,8 @@ steps:
       path: <<parameters.path>>
       var_file: <<parameters.var_file>>
       cli_config_file: <<parameters.cli_config_file>>
-  - <<parameters.pre_apply_steps>>
-  - apply:
-      path: <<parameters.path>>
-      var_file: <<parameters.var_file>>
-      cli_config_file: <<parameters.cli_config_file>>
-  - <<parameters.post_apply_steps>>
+  - <<parameters.post_plan_steps>>
+  - persist_to_workspace:
+      root: <<parameters.path>>
+      paths:
+        - tfplan

@@ -1,0 +1,30 @@
+description: >
+  Run terraform apply in the given module. If a tfplan file exists in the
+  module path, applies that saved plan exactly (no re-plan). Otherwise runs
+  a direct apply with the supplied var_file.
+
+parameters:
+  path:
+    description: Path to the terraform module
+    default: .
+    type: string
+  var_file:
+    description: >
+      Variable file to pass via -var-file when no saved tfplan is present.
+      When empty (default), the flag is omitted entirely. Ignored when a
+      saved tfplan is being applied (var-files are baked into the plan).
+    default: ''
+    type: string
+  cli_config_file:
+    description: Path to a terraform CLI config file
+    default: ''
+    type: string
+
+steps:
+  - run:
+      name: Terraform apply
+      environment:
+        TERRAFORM_PARAM_PATH: <<parameters.path>>
+        TERRAFORM_PARAM_VAR_FILE: <<parameters.var_file>>
+        TERRAFORM_PARAM_CLI_CONFIG_FILE: <<parameters.cli_config_file>>
+      command: <<include(scripts/apply.sh)>>

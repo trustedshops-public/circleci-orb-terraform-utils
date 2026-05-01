@@ -1,0 +1,16 @@
+description: Standalone terraform plan that persists the resulting tfplan to the workspace
+usage:
+  version: 2.1
+  orbs:
+    terraform-utils: trustedshops-public/terraform-utils@<version>
+  workflows:
+    plan_on_pr:
+      jobs:
+        - terraform-utils/terraform_plan:
+            name: plan
+            terraform_version: 1.10.5
+            path: terraform
+            var_file: vars/dev.tfvars
+            filters:
+              branches:
+                ignore: main
