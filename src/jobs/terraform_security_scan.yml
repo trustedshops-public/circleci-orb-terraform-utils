@@ -9,9 +9,9 @@ executor: default
 
 parameters:
   trivy_version:
-    description: Version of trivy to install (e.g. v0.50.0)
+    description: Version of trivy to install (e.g. v0.70.0)
     # renovate: datasource=github-releases depName=aquasecurity/trivy
-    default: v0.50.0
+    default: v0.70.0
     type: string
   path:
     description: Path to scan

@@ -8,6 +8,6 @@ usage:
       jobs:
         - terraform-utils/terraform_security_scan:
             name: security-scan
-            trivy_version: v0.50.0
+            trivy_version: v0.70.0
             path: terraform
             severity: "HIGH,CRITICAL"

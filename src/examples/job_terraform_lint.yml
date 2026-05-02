@@ -8,7 +8,7 @@ usage:
       jobs:
         - terraform-utils/terraform_lint:
             name: lint
-            tflint_version: v0.55.0
+            tflint_version: v0.62.0
             path: terraform
             config_file: .tflint.hcl
             recursive: true

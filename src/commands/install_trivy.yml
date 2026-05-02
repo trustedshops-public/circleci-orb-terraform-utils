@@ -6,9 +6,9 @@ parameters:
     type: string
     description: >
       Version of trivy to install. Use the upstream tag form including
-      the v prefix, e.g. "v0.50.0".
+      the v prefix, e.g. "v0.70.0".
     # renovate: datasource=github-releases depName=aquasecurity/trivy
-    default: v0.50.0
+    default: v0.70.0
 
 steps:
   - run:
