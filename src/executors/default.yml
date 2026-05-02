@@ -6,7 +6,8 @@ docker:
 
 parameters:
   tag:
-    default: "stable"
+    # renovate: datasource=docker depName=cimg/base
+    default: "2026.04"
     description: >
       Pick a specific cimg/base image variant:
       https://hub.docker.com/r/cimg/base/tags
