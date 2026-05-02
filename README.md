@@ -19,6 +19,7 @@ installer.
   - [Jobs](#jobs)
   - [Commands](#commands)
   - [Multi-module via workflow matrix](#multi-module-via-workflow-matrix)
+  - [Passing extra terraform flags](#passing-extra-terraform-flags)
   - [Authentication for auto-commit](#authentication-for-auto-commit)
     - [Branch protection](#branch-protection)
   - [Migrating from a previous major version](#migrating-from-a-previous-major-version)
@@ -106,6 +107,27 @@ workflows:
             branches:
               ignore: main
 ```
+
+## Passing extra terraform flags
+
+The orb's commands don't expose every terraform flag as a parameter. For
+one-off needs (`-target`, `-replace`, `-refresh-only`, etc.) use terraform's
+built-in `TF_CLI_ARGS_<command>` env vars, set via `BASH_ENV` in a
+`pre_<verb>_steps` hook.
+
+```yaml
+- terraform-utils/terraform_plan:
+    terraform_version: "1.10.5"
+    path: terraform
+    pre_init_steps:
+      - run:
+          name: Plan only the SSM parameter
+          command: echo 'export TF_CLI_ARGS_plan="-target=aws_ssm_parameter.smoke"' >> $BASH_ENV
+```
+
+Setting the env var in `pre_init_steps` puts it in scope for every later
+terraform invocation in the same job — useful when a single job runs
+init + plan + apply (e.g. `terraform_apply`).
 
 ## Authentication for auto-commit
 
