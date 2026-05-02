@@ -18,6 +18,10 @@ parameters:
     description: Version of terraform-docs to install. Default "none" skips installation.
     default: none
     type: string
+  tflint_version:
+    description: Version of tflint to install. Default "none" skips installation.
+    default: none
+    type: string
 
 steps:
   - unless:
@@ -48,3 +52,10 @@ steps:
       steps:
         - install_terraform_docs:
             version: <<parameters.terraform_docs_version>>
+  - unless:
+      condition:
+        and:
+          - equal: [<<parameters.tflint_version>>, "none"]
+      steps:
+        - install_tflint:
+            version: <<parameters.tflint_version>>

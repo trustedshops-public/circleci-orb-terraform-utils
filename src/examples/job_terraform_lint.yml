@@ -1,0 +1,14 @@
+description: Lint terraform modules with tflint as a fast PR gate
+usage:
+  version: 2.1
+  orbs:
+    terraform-utils: trustedshops-public/terraform-utils@<version>
+  workflows:
+    pr_checks:
+      jobs:
+        - terraform-utils/terraform_lint:
+            name: lint
+            tflint_version: v0.55.0
+            path: terraform
+            config_file: .tflint.hcl
+            recursive: true

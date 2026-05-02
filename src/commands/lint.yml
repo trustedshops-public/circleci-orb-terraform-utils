@@ -1,0 +1,28 @@
+description: >
+  Run tflint on the given module. Performs `tflint --init` first to
+  install any plugins declared in .tflint.hcl, then runs the linter.
+
+parameters:
+  path:
+    description: Path to the terraform module
+    default: .
+    type: string
+  config_file:
+    description: >
+      Path to a .tflint.hcl config file (relative to the module path
+      after cd, or absolute). Empty uses tflint's default lookup.
+    default: ''
+    type: string
+  recursive:
+    description: Recurse into subdirectories when running tflint
+    default: false
+    type: boolean
+
+steps:
+  - run:
+      name: tflint
+      environment:
+        TFLINT_PARAM_PATH: <<parameters.path>>
+        TFLINT_PARAM_CONFIG_FILE: <<parameters.config_file>>
+        TFLINT_PARAM_RECURSIVE: <<parameters.recursive>>
+      command: <<include(scripts/lint.sh)>>
