@@ -25,7 +25,7 @@ fi
 git commit -m "${GIT_PUSH_PARAM_COMMIT_MESSAGE}"
 git push origin "${GIT_PUSH_PARAM_BRANCH}"
 
-if [[ "${GIT_PUSH_PARAM_FAIL_IF_CHANGES}" == "true" ]]; then
+if [[ "${GIT_PUSH_PARAM_FAIL_IF_CHANGES}" == "1" || "${GIT_PUSH_PARAM_FAIL_IF_CHANGES}" == "true" ]]; then
   echo "Pushed changes to ${GIT_PUSH_PARAM_BRANCH}; failing job to trigger CI re-run against new HEAD." >&2
   exit 1
 fi
