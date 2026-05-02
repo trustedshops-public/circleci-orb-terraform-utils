@@ -1,0 +1,18 @@
+description: >
+  Install trivy
+
+parameters:
+  version:
+    type: string
+    description: >
+      Version of trivy to install. Use the upstream tag form including
+      the v prefix, e.g. "v0.50.0".
+    # renovate: datasource=github-releases depName=aquasecurity/trivy
+    default: v0.50.0
+
+steps:
+  - run:
+      name: Install trivy
+      environment:
+        TRIVY_PARAM_VERSION: <<parameters.version>>
+      command: <<include(scripts/install_trivy.sh)>>

@@ -22,6 +22,10 @@ parameters:
     description: Version of tflint to install. Default "none" skips installation.
     default: none
     type: string
+  trivy_version:
+    description: Version of trivy to install. Default "none" skips installation.
+    default: none
+    type: string
 
 steps:
   - unless:
@@ -59,3 +63,10 @@ steps:
       steps:
         - install_tflint:
             version: <<parameters.tflint_version>>
+  - unless:
+      condition:
+        and:
+          - equal: [<<parameters.trivy_version>>, "none"]
+      steps:
+        - install_trivy:
+            version: <<parameters.trivy_version>>

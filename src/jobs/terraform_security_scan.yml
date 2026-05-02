@@ -1,0 +1,81 @@
+description: >
+  Scan a terraform module for security misconfigurations using trivy.
+
+  Installs trivy, then runs `trivy config` against the module path.
+  Fails the job by default if any finding at the given severity
+  threshold (default HIGH and CRITICAL) is reported.
+
+executor: default
+
+parameters:
+  trivy_version:
+    description: Version of trivy to install (e.g. v0.50.0)
+    # renovate: datasource=github-releases depName=aquasecurity/trivy
+    default: v0.50.0
+    type: string
+  path:
+    description: Path to scan
+    default: .
+    type: string
+  severity:
+    description: Comma-separated severities to report (e.g. "HIGH,CRITICAL")
+    default: "HIGH,CRITICAL"
+    type: string
+  exit_on_finding:
+    description: Exit non-zero on any finding at the given severity
+    default: true
+    type: boolean
+  config_file:
+    description: >
+      Path to a trivy.yaml config file. Empty triggers trivy's
+      auto-discovery (looks for trivy.yaml in cwd).
+    default: ''
+    type: string
+  pre_security_scan_steps:
+    type: steps
+    description: Steps to execute before trivy
+    default: []
+  post_security_scan_steps:
+    type: steps
+    description: Steps to execute after trivy
+    default: []
+  rewrite_github_clone_url:
+    type: boolean
+    default: false
+    description: Rewrite git urls for github to use https with env var GITHUB_TOKEN
+  attach_workspace:
+    default: true
+    description: Boolean for whether or not to attach to an existing workspace.
+    type: boolean
+  checkout:
+    default: true
+    description: Boolean for whether or not to checkout sources
+    type: boolean
+  workspace_root:
+    default: .
+    description: Workspace root path that is either an absolute path or a path relative to the working directory.
+    type: string
+
+steps:
+  - when:
+      condition: <<parameters.checkout>>
+      steps:
+        - checkout
+  - when:
+      condition: <<parameters.attach_workspace>>
+      steps:
+        - attach_workspace:
+            at: <<parameters.workspace_root>>
+  - install_trivy:
+      version: <<parameters.trivy_version>>
+  - when:
+      condition: <<parameters.rewrite_github_clone_url>>
+      steps:
+        - github-utils/rewrite_urls_with_token
+  - <<parameters.pre_security_scan_steps>>
+  - security_scan:
+      path: <<parameters.path>>
+      severity: <<parameters.severity>>
+      exit_on_finding: <<parameters.exit_on_finding>>
+      config_file: <<parameters.config_file>>
+  - <<parameters.post_security_scan_steps>>
