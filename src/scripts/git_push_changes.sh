@@ -1,10 +1,20 @@
 #!/bin/bash
 set -euo pipefail
 
+# Resolve the target branch. Empty GIT_PUSH_PARAM_BRANCH means "use the
+# current CircleCI branch". CCI parameter defaults can't reference
+# ${CIRCLE_BRANCH} because YAML does not bash-expand value templates.
+TARGET_BRANCH="${GIT_PUSH_PARAM_BRANCH:-${CIRCLE_BRANCH:-}}"
+
+if [[ -z "${TARGET_BRANCH}" ]]; then
+  echo "No target branch resolved: branch param is empty and CIRCLE_BRANCH is unset." >&2
+  exit 1
+fi
+
 # Refuse to push to a protected branch
 for protected in ${GIT_PUSH_PARAM_PROTECTED_BRANCHES}; do
-  if [[ "${GIT_PUSH_PARAM_BRANCH}" == "${protected}" ]]; then
-    echo "Refusing to push to protected branch: ${GIT_PUSH_PARAM_BRANCH}" >&2
+  if [[ "${TARGET_BRANCH}" == "${protected}" ]]; then
+    echo "Refusing to push to protected branch: ${TARGET_BRANCH}" >&2
     echo "Set protected_branches to a list that excludes this branch to override." >&2
     exit 1
   fi
@@ -23,11 +33,11 @@ if git diff --cached --quiet; then
 fi
 
 git commit -m "${GIT_PUSH_PARAM_COMMIT_MESSAGE}"
-git push origin "${GIT_PUSH_PARAM_BRANCH}"
+git push origin "${TARGET_BRANCH}"
 
 if [[ "${GIT_PUSH_PARAM_FAIL_IF_CHANGES}" == "1" || "${GIT_PUSH_PARAM_FAIL_IF_CHANGES}" == "true" ]]; then
-  echo "Pushed changes to ${GIT_PUSH_PARAM_BRANCH}; failing job to trigger CI re-run against new HEAD." >&2
+  echo "Pushed changes to ${TARGET_BRANCH}; failing job to trigger CI re-run against new HEAD." >&2
   exit 1
 fi
 
-echo "Pushed changes to ${GIT_PUSH_PARAM_BRANCH}."
+echo "Pushed changes to ${TARGET_BRANCH}."

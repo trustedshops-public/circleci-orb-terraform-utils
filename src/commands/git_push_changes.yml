@@ -30,8 +30,12 @@ parameters:
       splitting, so multiple paths can be space-separated.
   branch:
     type: string
-    default: "${CIRCLE_BRANCH}"
-    description: Branch to push to. Defaults to the current CircleCI branch.
+    default: ""
+    description: >
+      Branch to push to. When empty (default), uses CircleCI's
+      CIRCLE_BRANCH env var at runtime (the current branch).
+      CCI parameter defaults do not bash-expand `${...}`, which is why
+      this can't have CIRCLE_BRANCH as the literal default.
   protected_branches:
     type: string
     default: "main master"
