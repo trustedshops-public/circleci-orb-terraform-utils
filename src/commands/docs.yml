@@ -1,0 +1,44 @@
+description: >
+  Generate or check terraform module documentation using terraform-docs.
+
+parameters:
+  path:
+    description: Path to the terraform module
+    default: .
+    type: string
+  format:
+    description: >
+      terraform-docs format. May be a single word ("markdown", "json")
+      or include a sub-format ("markdown table", "markdown document").
+    default: "markdown table"
+    type: string
+  output_file:
+    description: >
+      File (relative to the module path) where docs are written or
+      checked. When empty, terraform-docs writes to stdout.
+    default: README.md
+    type: string
+  config_file:
+    description: >
+      Path to a terraform-docs config file (.terraform-docs.yml). When
+      empty, terraform-docs uses its built-in defaults.
+    default: ''
+    type: string
+  check:
+    description: >
+      When true (default), runs with --output-check which fails if the
+      output file is out of date with the current .tf files. When false,
+      writes the output file in place.
+    default: true
+    type: boolean
+
+steps:
+  - run:
+      name: terraform-docs
+      environment:
+        TERRAFORM_DOCS_PARAM_PATH: <<parameters.path>>
+        TERRAFORM_DOCS_PARAM_FORMAT: <<parameters.format>>
+        TERRAFORM_DOCS_PARAM_OUTPUT_FILE: <<parameters.output_file>>
+        TERRAFORM_DOCS_PARAM_CONFIG_FILE: <<parameters.config_file>>
+        TERRAFORM_DOCS_PARAM_CHECK: <<parameters.check>>
+      command: <<include(scripts/docs.sh)>>
