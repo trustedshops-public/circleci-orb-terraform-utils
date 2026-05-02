@@ -1,0 +1,150 @@
+description: >
+  Run `terraform fmt` on a module.
+
+  Default behaviour (auto_commit: false): runs `terraform fmt -recursive
+  -check` and fails the job if any file needs formatting.
+
+  When auto_commit: true, runs `terraform fmt -recursive` (modifies
+  files), then commits and pushes the changes back to the current branch
+  using the git_push_changes helper. Refuses to push to main/master.
+  Requires git authentication to be configured (typically via
+  github-utils/rewrite_urls_with_token in pre_commit_steps).
+
+executor: default
+
+environment:
+  TF_IN_AUTOMATION: 1
+
+parameters:
+  tfenv_version:
+    description: Version of tfenv to install. Default "none" skips installation.
+    default: none
+    type: string
+  terraform_version:
+    description: Version of terraform to install. Default "none" skips installation.
+    default: none
+    type: string
+  path:
+    description: Path to terraform module
+    default: .
+    type: string
+  recursive:
+    description: Recurse into subdirectories when running fmt
+    default: true
+    type: boolean
+  auto_commit:
+    type: boolean
+    default: false
+    description: >
+      When false (default), runs `terraform fmt -check` and fails the job
+      on any formatting drift. When true, fixes formatting in place,
+      commits the result, and pushes back to the current branch via
+      git_push_changes. Requires git_user_name, git_user_email, and
+      git authentication to be configured by the caller (see
+      pre_commit_steps).
+  git_user_name:
+    type: string
+    default: ''
+    description: >
+      Git author/committer name (required when auto_commit is true).
+      e.g. "etrusted-bot".
+  git_user_email:
+    type: string
+    default: ''
+    description: >
+      Git author/committer email (required when auto_commit is true).
+  commit_message:
+    type: string
+    default: "chore: apply terraform fmt"
+    description: Commit message used when auto_commit is true.
+  protected_branches:
+    type: string
+    default: "main master"
+    description: >
+      Space-separated list of branches the auto-commit will refuse to
+      push to.
+  fail_if_changes:
+    type: boolean
+    default: true
+    description: >
+      When auto_commit is true and changes were pushed, fail the job
+      so CI re-runs against the new HEAD. When false, succeed quietly
+      after pushing.
+  pre_fmt_steps:
+    type: steps
+    description: Steps to execute before `terraform fmt`
+    default: []
+  pre_commit_steps:
+    type: steps
+    description: >
+      Steps to execute after `terraform fmt` and before git_push_changes,
+      only when auto_commit is true. Typical use: configure git auth via
+      `github-utils/rewrite_urls_with_token`.
+    default: []
+  rewrite_github_clone_url:
+    type: boolean
+    default: false
+    description: Rewrite git urls for github to use https with env var GITHUB_TOKEN
+  attach_workspace:
+    default: true
+    description: Boolean for whether or not to attach to an existing workspace.
+    type: boolean
+  checkout:
+    default: true
+    description: Boolean for whether or not to checkout sources
+    type: boolean
+  workspace_root:
+    default: .
+    description: Workspace root path that is either an absolute path or a path relative to the working directory.
+    type: string
+
+steps:
+  - when:
+      condition: <<parameters.checkout>>
+      steps:
+        - checkout
+  - when:
+      condition: <<parameters.attach_workspace>>
+      steps:
+        - attach_workspace:
+            at: <<parameters.workspace_root>>
+  - install_tools:
+      tfenv_version: <<parameters.tfenv_version>>
+      terraform_version: <<parameters.terraform_version>>
+  - when:
+      condition: <<parameters.rewrite_github_clone_url>>
+      steps:
+        - github-utils/rewrite_urls_with_token
+  - unless:
+      condition:
+        and:
+          - equal: [<<parameters.tfenv_version>>, "none"]
+      steps:
+        - run:
+            name: Install terraform version for module
+            environment:
+              TFENV_PARAM_PATH: <<parameters.path>>
+            command: <<include(scripts/tfenv_install_module_version.sh)>>
+  - <<parameters.pre_fmt_steps>>
+  - when:
+      condition: <<parameters.auto_commit>>
+      steps:
+        - fmt:
+            path: <<parameters.path>>
+            recursive: <<parameters.recursive>>
+            check: false
+        - <<parameters.pre_commit_steps>>
+        - git_push_changes:
+            git_user_name: <<parameters.git_user_name>>
+            git_user_email: <<parameters.git_user_email>>
+            commit_message: <<parameters.commit_message>>
+            paths_to_add: <<parameters.path>>
+            protected_branches: <<parameters.protected_branches>>
+            fail_if_changes: <<parameters.fail_if_changes>>
+  - unless:
+      condition: <<parameters.auto_commit>>
+      steps:
+        - fmt:
+            path: <<parameters.path>>
+            recursive: <<parameters.recursive>>
+            check: true

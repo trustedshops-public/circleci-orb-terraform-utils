@@ -1,0 +1,28 @@
+description: >
+  Run `terraform fmt` on the given module.
+
+parameters:
+  path:
+    description: Path to the terraform module
+    default: .
+    type: string
+  recursive:
+    description: Recurse into subdirectories
+    default: true
+    type: boolean
+  check:
+    description: >
+      When true (default), runs `terraform fmt -check` which fails if any
+      file needs formatting (no files modified). When false, modifies
+      files in place to match canonical formatting.
+    default: true
+    type: boolean
+
+steps:
+  - run:
+      name: Terraform fmt
+      environment:
+        TERRAFORM_PARAM_PATH: <<parameters.path>>
+        TERRAFORM_PARAM_RECURSIVE: <<parameters.recursive>>
+        TERRAFORM_PARAM_CHECK: <<parameters.check>>
+      command: <<include(scripts/fmt.sh)>>
