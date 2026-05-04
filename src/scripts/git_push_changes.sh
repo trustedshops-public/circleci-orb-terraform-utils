@@ -20,9 +20,6 @@ for protected in ${GIT_PUSH_PARAM_PROTECTED_BRANCHES}; do
   fi
 done
 
-git config user.name "${GIT_PUSH_PARAM_USER_NAME}"
-git config user.email "${GIT_PUSH_PARAM_USER_EMAIL}"
-
 # shellcheck disable=SC2086
 # Intentional word splitting on paths_to_add so users can pass "dir1 dir2 file.ext".
 git add ${GIT_PUSH_PARAM_PATHS}
@@ -32,7 +29,13 @@ if git diff --cached --quiet; then
   exit 0
 fi
 
-git commit -m "${GIT_PUSH_PARAM_COMMIT_MESSAGE}"
+# Scope the bot identity to this commit only. Avoids leaking ci-bot
+# author/committer values into the local .git/config, which would
+# otherwise apply to any later steps that share the working tree
+# (e.g. another checkout + commit in the same job).
+git -c user.name="${GIT_PUSH_PARAM_USER_NAME}" \
+    -c user.email="${GIT_PUSH_PARAM_USER_EMAIL}" \
+    commit -m "${GIT_PUSH_PARAM_COMMIT_MESSAGE}"
 git push origin "${TARGET_BRANCH}"
 
 if [[ "${GIT_PUSH_PARAM_FAIL_IF_CHANGES}" == "1" || "${GIT_PUSH_PARAM_FAIL_IF_CHANGES}" == "true" ]]; then
