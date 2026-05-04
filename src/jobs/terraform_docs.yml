@@ -1,7 +1,7 @@
 description: >
   Generate or check terraform module documentation using terraform-docs.
 
-  Default behaviour (auto_commit: false): runs with --output-check and
+  Default behavior (auto_commit: false): runs with --output-check and
   fails the job if the output file is out of date with the current .tf
   files. Suitable as a fast PR gate.
 

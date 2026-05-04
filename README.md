@@ -55,7 +55,7 @@ and `terraform apply tfplan` against the `terraform/` module.
 Each job runs `checkout`, installs the toolchain, performs the action, and
 persists any outputs to the workspace where appropriate.
 
-| Job | Default behaviour |
+| Job | Default behavior |
 |---|---|
 | `terraform_validate` | Init (no backend) + validate. Fast PR gate. |
 | `terraform_init` | Init + persist `.terraform/` to the workspace. |

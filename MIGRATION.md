@@ -20,7 +20,7 @@ The `provision` command's orchestration is now inlined in the
   invoking the orb's commands directly (`install_tools`, `terrastate_init`,
   `init`, `plan`, `apply`) or use the `terraform_apply` job.
 - **If you used the `terraform_apply` job**: no change needed. The job's
-  parameters and behaviour are preserved (subject to the other notes below).
+  parameters and behavior are preserved (subject to the other notes below).
 
 ### `terraform_apply_with_circleci_ip_range` job removed
 
@@ -103,7 +103,7 @@ own internal plan could differ from the previous. In v5, the job runs
 `init` → `plan -out=tfplan` → `apply tfplan` — the applied plan is
 exactly the plan that was previewed within the same job.
 
-No action required to migrate; this is a behaviour improvement that may
+No action required to migrate; this is a behavior improvement that may
 remove drift surprises in long-running pipelines.
 
 **Caveat:** the saved `tfplan` snapshots the state at plan time. If anything

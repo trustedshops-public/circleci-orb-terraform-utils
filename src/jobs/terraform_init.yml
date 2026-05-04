@@ -1,5 +1,5 @@
 description: >
-  Initialise a terraform module: install tools, run terraform init, and
+  Initialize a terraform module: install tools, run terraform init, and
   persist the resulting .terraform/ directory to the CircleCI workspace so
   downstream jobs can reuse providers and backend config without re-running init.
 

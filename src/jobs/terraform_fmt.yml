@@ -1,7 +1,7 @@
 description: >
   Run `terraform fmt` on a module.
 
-  Default behaviour (auto_commit: false): runs `terraform fmt -recursive
+  Default behavior (auto_commit: false): runs `terraform fmt -recursive
   -check` and fails the job if any file needs formatting.
 
   When auto_commit: true, runs `terraform fmt -recursive` (modifies

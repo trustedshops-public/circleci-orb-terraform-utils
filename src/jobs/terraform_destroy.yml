@@ -1,5 +1,5 @@
 description: >
-  Destroy a terraform module: install tools, initialise, destroy.
+  Destroy a terraform module: install tools, initialize, destroy.
 
   Runs `terraform destroy -auto-approve` directly (not against a saved
   plan file). For a review-and-apply destroy flow, run terraform_plan

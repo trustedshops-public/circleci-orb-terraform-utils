@@ -1,5 +1,5 @@
 description: >
-  Apply a terraform module: install tools, initialise, plan, apply.
+  Apply a terraform module: install tools, initialize, plan, apply.
 
   Uses a saved plan (-out=tfplan) so apply applies exactly the plan that was
   produced earlier in the same job, with no possibility of drift.
@@ -30,7 +30,7 @@ parameters:
     description: >
       Variable file to pass via -var-file. When empty (default), the flag is
       omitted entirely. Set explicitly to "vars.tfvars" for the previous
-      orb default behaviour.
+      orb default behavior.
     default: ''
     type: string
   cli_config_file:

@@ -1,5 +1,5 @@
 description: >
-  Plan a terraform module: install tools, initialise, plan. The resulting
+  Plan a terraform module: install tools, initialize, plan. The resulting
   tfplan file is persisted to the CircleCI workspace at <path>/tfplan so a
   downstream job can apply exactly that plan (e.g. after manual approval).
 
