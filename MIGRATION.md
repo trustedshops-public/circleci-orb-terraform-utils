@@ -37,9 +37,14 @@ jobs:
       - checkout
       - terraform-utils/install_tools:
           terraform_version: "1.10.5"
-      - terraform-utils/init: {path: terraform}
-      - terraform-utils/plan: {path: terraform, var_file: vars/dev.tfvars}
-      - terraform-utils/apply: {path: terraform, var_file: vars/dev.tfvars}
+      - terraform-utils/init:
+          path: terraform
+      - terraform-utils/plan:
+          path: terraform
+          var_file: vars/dev.tfvars
+      - terraform-utils/apply:
+          path: terraform
+          var_file: vars/dev.tfvars
 ```
 
 ### `var_file` default changed from `"vars.tfvars"` to `""`
@@ -100,6 +105,13 @@ exactly the plan that was previewed within the same job.
 
 No action required to migrate; this is a behaviour improvement that may
 remove drift surprises in long-running pipelines.
+
+**Caveat:** the saved `tfplan` snapshots the state at plan time. If anything
+else mutates the state between plan and apply (e.g. a manual
+`terraform apply` from a workstation, or a parallel pipeline run on the
+same backend), the stored plan becomes stale and apply will refuse to
+use it. In practice this means the pipeline should be the single source
+of truth for applies during the plan-to-apply window.
 
 ### terrastate is no longer used inside `terrastate apply` flows
 
