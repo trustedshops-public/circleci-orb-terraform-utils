@@ -6,7 +6,7 @@ usage:
   workflows:
     pr_checks:
       jobs:
-        - terraform-utils/terraform_lint:
+        - terraform-utils/lint:
             name: lint
             tflint_version: v0.62.0
             path: terraform

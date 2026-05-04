@@ -6,7 +6,7 @@ usage:
   workflows:
     pr_checks:
       jobs:
-        - terraform-utils/terraform_security_scan:
+        - terraform-utils/security_scan:
             name: security-scan
             trivy_version: v0.70.0
             path: terraform

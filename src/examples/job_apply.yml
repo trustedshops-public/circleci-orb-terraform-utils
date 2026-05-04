@@ -7,7 +7,7 @@ usage:
     version: 2
     continuous:
       jobs:
-        - terraform-utils/terraform_apply:
+        - terraform-utils/apply:
             name: deploy-prod
             terraform_version: 1.9.7
             path: terraform

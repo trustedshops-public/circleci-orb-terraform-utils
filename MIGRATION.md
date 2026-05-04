@@ -4,23 +4,35 @@
 
 v5 is a breaking refactor. The orb is now self-contained for terraform
 operations (no longer wraps `circleci/terraform`), gains native commands for
-`init` / `plan` / `apply` / `destroy` / `validate`, adds `terraform_fmt`,
-`terraform_docs`, `terraform_lint`, and `terraform_security_scan` jobs, and
-introduces an opt-in provider cache.
+`init` / `plan` / `apply` / `destroy` / `validate`, adds `fmt`, `docs`,
+`lint`, and `security_scan` jobs, and introduces an opt-in provider cache.
 
 Below is every breaking change you may need to handle when bumping the
 `@<version>` pin from `4.x` to `5.x`.
 
+### `terraform_apply` job renamed to `apply`
+
+v5 adopts a bare-verb naming convention for jobs (`apply`, `plan`, `init`,
+etc.). The orb namespace `terraform-utils/` already conveys the domain, so
+the per-job `terraform_` prefix was redundant. v4 only shipped one job
+(`terraform_apply`), so this is the only rename you need to apply:
+
+- `terraform-utils/terraform_apply` → `terraform-utils/apply`
+
+The other v5 jobs (`init`, `plan`, `destroy`, `validate`, `fmt`, `docs`,
+`lint`, `security_scan`) are new in v5; they ship with bare names from the
+start.
+
 ### `provision` command removed
 
-The `provision` command's orchestration is now inlined in the
-`terraform_apply` job. Migrate by:
+The `provision` command's orchestration is now inlined in the `apply` job.
+Migrate by:
 
 - **If you used `terraform-utils/provision` from your own jobs**: switch to
   invoking the orb's commands directly (`install_tools`, `terrastate_init`,
-  `init`, `plan`, `apply`) or use the `terraform_apply` job.
-- **If you used the `terraform_apply` job**: no change needed. The job's
-  parameters and behavior are preserved (subject to the other notes below).
+  `init`, `plan`, `apply`) or use the `apply` job.
+- **If you used the `terraform_apply` job**: rename to `apply`. Parameters
+  and behavior are otherwise preserved (subject to the other notes below).
 
 ### `terraform_apply_with_circleci_ip_range` job removed
 
@@ -55,7 +67,7 @@ entirely from the underlying terraform invocations. This means:
 - **Modules without a tfvars file** now work without explicitly setting
   `var_file: ""`.
 - **Modules that relied on the implicit `vars.tfvars` default** must set
-  `var_file: vars.tfvars` explicitly on every `terraform_*` job invocation.
+  `var_file: vars.tfvars` explicitly on every job invocation.
 
 ### `circleci/terraform` orb dependency dropped
 
@@ -84,24 +96,24 @@ consumer-side commands depend on. Migrate by:
   to a `cimg/python:*` variant, or supply your own executor.
 
 ```yaml
-- terraform-utils/terraform_apply:
+- terraform-utils/apply:
     tag: "3.11.2"   # if you really need cimg/python:3.11.2 back
 ```
 
 ### Hook parameter `post_init_steps` renamed to `pre_plan_steps`
 
-In v4, the slot between `terraform init` and `terraform plan` (in
-`terraform_apply` and `terraform_plan` jobs) was named `post_init_steps`.
-v5 renames it to `pre_plan_steps` so all hook names follow the same
-"runs immediately before the named verb" convention. Same semantic, new
-name. Find-and-replace in your `.circleci/config.yml`.
+In v4, the slot between `terraform init` and `terraform plan` (in the
+`apply` and `plan` jobs) was named `post_init_steps`. v5 renames it to
+`pre_plan_steps` so all hook names follow the same "runs immediately before
+the named verb" convention. Same semantic, new name. Find-and-replace in
+your `.circleci/config.yml`.
 
 ### Apply uses a saved tfplan internally
 
-In v4, `terraform_apply` ran `init` → `plan` → `apply`, where each step's
-own internal plan could differ from the previous. In v5, the job runs
-`init` → `plan -out=tfplan` → `apply tfplan` — the applied plan is
-exactly the plan that was previewed within the same job.
+In v4, the apply job ran `init` → `plan` → `apply`, where each step's own
+internal plan could differ from the previous. In v5, the job runs
+`init` → `plan -out=tfplan` → `apply tfplan` — the applied plan is exactly
+the plan that was previewed within the same job.
 
 No action required to migrate; this is a behavior improvement that may
 remove drift surprises in long-running pipelines.

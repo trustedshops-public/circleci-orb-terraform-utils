@@ -6,11 +6,11 @@ usage:
   workflows:
     plan_review_apply:
       jobs:
-        - terraform-utils/terraform_init:
+        - terraform-utils/init:
             name: init
             terraform_version: 1.10.5
             path: terraform
-        - terraform-utils/terraform_plan:
+        - terraform-utils/plan:
             name: plan
             terraform_version: 1.10.5
             path: terraform

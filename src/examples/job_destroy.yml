@@ -1,16 +1,16 @@
-description: Standalone terraform plan that persists the resulting tfplan to the workspace
+description: Tear down a terraform-managed environment on a manual trigger
 usage:
   version: 2.1
   orbs:
     terraform-utils: trustedshops-public/terraform-utils@<version>
   workflows:
-    plan_on_pr:
+    teardown:
       jobs:
-        - terraform-utils/terraform_plan:
-            name: plan
+        - terraform-utils/destroy:
+            name: destroy-dev
             terraform_version: 1.10.5
             path: terraform
             var_file: vars/dev.tfvars
             filters:
               branches:
-                ignore: main
+                only: teardown-dev

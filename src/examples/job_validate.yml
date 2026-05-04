@@ -6,7 +6,7 @@ usage:
   workflows:
     pr_checks:
       jobs:
-        - terraform-utils/terraform_validate:
+        - terraform-utils/validate:
             name: validate
             terraform_version: 1.10.5
             path: terraform

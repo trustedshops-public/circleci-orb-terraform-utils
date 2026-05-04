@@ -7,7 +7,7 @@ usage:
   workflows:
     pr_checks:
       jobs:
-        - terraform-utils/terraform_docs:
+        - terraform-utils/docs:
             name: docs-check
             terraform_docs_version: v0.20.0
             path: terraform

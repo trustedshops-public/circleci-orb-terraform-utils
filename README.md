@@ -41,7 +41,7 @@ orbs:
 workflows:
   deploy:
     jobs:
-      - terraform-utils/terraform_apply:
+      - terraform-utils/apply:
           terraform_version: "1.10.5"
           path: terraform
           var_file: vars/dev.tfvars
@@ -57,15 +57,15 @@ persists any outputs to the workspace where appropriate.
 
 | Job | Default behavior |
 |---|---|
-| `terraform_validate` | Init (no backend) + validate. Fast PR gate. |
-| `terraform_init` | Init + persist `.terraform/` to the workspace. |
-| `terraform_plan` | Init + plan + persist `tfplan` to the workspace. |
-| `terraform_apply` | Init + plan + apply (single job; applies the plan it just produced). |
-| `terraform_destroy` | Init + `terraform destroy -auto-approve`. |
-| `terraform_fmt` | `terraform fmt -recursive -check`. With `auto_commit: true`, fixes in place and pushes. |
-| `terraform_docs` | `terraform-docs --output-check`. With `auto_commit: true`, regenerates and pushes. |
-| `terraform_lint` | `tflint --init` + `tflint`. |
-| `terraform_security_scan` | `trivy config` with default `HIGH,CRITICAL` severity threshold. |
+| `validate` | Init (no backend) + validate. Fast PR gate. |
+| `init` | Init + persist `.terraform/` to the workspace. |
+| `plan` | Init + plan + persist `tfplan` to the workspace. |
+| `apply` | Init + plan + apply (single job; applies the plan it just produced). |
+| `destroy` | Init + `terraform destroy -auto-approve`. |
+| `fmt` | `terraform fmt -recursive -check`. With `auto_commit: true`, fixes in place and pushes. |
+| `docs` | `terraform-docs --output-check`. With `auto_commit: true`, regenerates and pushes. |
+| `lint` | `tflint --init` + `tflint`. |
+| `security_scan` | `trivy config` with default `HIGH,CRITICAL` severity threshold. |
 
 Each job exposes linear extension hooks: `pre_<verb>_steps` runs immediately
 before that verb (`init`, `plan`, `apply`, `destroy`, `validate`, `fmt`, `docs`,
@@ -96,7 +96,7 @@ The orb does not have an internal `paths` parameter. Use CircleCI's native
 workflows:
   pr_checks:
     jobs:
-      - terraform-utils/terraform_plan:
+      - terraform-utils/plan:
           matrix:
             parameters:
               path: [ecr, ecs, pagerduty, statuscake]
@@ -116,7 +116,7 @@ built-in `TF_CLI_ARGS_<command>` env vars, set via `BASH_ENV` in a
 `pre_<verb>_steps` hook.
 
 ```yaml
-- terraform-utils/terraform_plan:
+- terraform-utils/plan:
     terraform_version: "1.10.5"
     path: terraform
     pre_init_steps:
@@ -127,19 +127,18 @@ built-in `TF_CLI_ARGS_<command>` env vars, set via `BASH_ENV` in a
 
 Setting the env var in `pre_init_steps` puts it in scope for every later
 terraform invocation in the same job — useful when a single job runs
-init + plan + apply (e.g. `terraform_apply`).
+init + plan + apply (e.g. the `apply` job).
 
 ## Authentication for auto-commit
 
-`terraform_fmt` and `terraform_docs` with `auto_commit: true` need to push
-back to the branch.
+`fmt` and `docs` with `auto_commit: true` need to push back to the branch.
 
 1. Create a GitHub PAT scoped to `contents:write` on the relevant repo.
 2. Store it as `GITHUB_TOKEN` in a CircleCI context.
 3. Set `rewrite_github_clone_url: true` on the job.
 
 ```yaml
-- terraform-utils/terraform_fmt:
+- terraform-utils/fmt:
     auto_commit: true
     git_user_name: "ci-bot"
     git_user_email: "ci-bot@example.com"

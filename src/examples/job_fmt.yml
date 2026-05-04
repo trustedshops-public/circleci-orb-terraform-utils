@@ -8,7 +8,7 @@ usage:
   workflows:
     pr_checks:
       jobs:
-        - terraform-utils/terraform_fmt:
+        - terraform-utils/fmt:
             name: fmt-check
             terraform_version: 1.10.5
             path: terraform
