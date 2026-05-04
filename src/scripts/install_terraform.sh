@@ -18,15 +18,7 @@ cd "${WORK_DIR}"
 curl --location --silent --show-error --fail --output "${BINARY_ZIP}" "${BASE_URL}/${BINARY_ZIP}"
 curl --location --silent --show-error --fail --output "${CHECKSUM_FILE}" "${BASE_URL}/${CHECKSUM_FILE}"
 
-EXPECTED_SHA=$(grep "  ${BINARY_ZIP}$" "${CHECKSUM_FILE}" | awk '{print $1}')
-ACTUAL_SHA=$(sha256sum "${BINARY_ZIP}" | awk '{print $1}')
-
-if [[ "${EXPECTED_SHA}" != "${ACTUAL_SHA}" ]]; then
-  echo "checksum mismatch for ${BINARY_ZIP}" >&2
-  echo "  expected: ${EXPECTED_SHA}" >&2
-  echo "  actual:   ${ACTUAL_SHA}" >&2
-  exit 1
-fi
+sha256sum --check --ignore-missing "${CHECKSUM_FILE}"
 
 unzip -o "${BINARY_ZIP}"
 sudo mv terraform /usr/local/bin/terraform
