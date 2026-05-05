@@ -1,3 +1,74 @@
+## [5.0.0](https://github.com/trustedshops-public/circleci-orb-terraform-utils/compare/4.0.0...5.0.0) (2026-05-05)
+
+
+### ⚠ BREAKING CHANGES
+
+* drop terraform_ prefix from job names
+* **deps:** consumers of this orb who relied on circleci/terraform
+being transitively imported and accessible as terraform/* must import
+it directly in their own .circleci/config.yml.
+
+Signed-off-by: Timo Krause <timo.krause@trustedshops.com>
+* var_file default changes from "vars.tfvars" to ""
+(empty string). When empty, the -var-file flag is omitted entirely.
+Modules without a tfvars file now work without overriding var_file;
+modules relying on the implicit "vars.tfvars" default must set the
+parameter explicitly.
+* the provision command is removed. Its orchestration
+moves into the terraform_apply job. Consumers calling
+terraform-utils/provision directly must switch to the terraform_apply
+job or compose the orb's commands themselves.
+* post_init_steps parameter renamed to pre_plan_steps
+on terraform_apply and terraform_plan. The semantic is unchanged
+(still runs between init and plan) but the name is now consistent
+with the rest of the linear hook scheme.
+
+Signed-off-by: Timo Krause <timo.krause@trustedshops.com>
+* **jobs:** terraform_apply_with_circleci_ip_range job removed.
+Migration: define a custom job in your CI config that wraps the orb's
+commands and adds circleci_ip_ranges: true at the job level. Full
+example will be in CHANGELOG/README at the end of the v5 refactor.
+
+Signed-off-by: Timo Krause <timo.krause@trustedshops.com>
+* **executor:** default executor image changed from cimg/python:3.11.2
+to cimg/base:stable. Consumers relying on Python being present in the
+default executor must either install Python in pre_init_steps, override
+the executor, or pin to v4.x.
+
+Signed-off-by: Timo Krause <timo.krause@trustedshops.com>
+
+### Features
+
+* **cache:** add opt-in terraform provider caching ([200be0b](https://github.com/trustedshops-public/circleci-orb-terraform-utils/commit/200be0be7b6a9033bbb182baa0f8ce2e222418d2))
+* **destroy:** add native destroy command and terraform_destroy job ([858226d](https://github.com/trustedshops-public/circleci-orb-terraform-utils/commit/858226db750ff4c0b31826e425c43574f365fdcd))
+* **docs:** add terraform_docs job with terraform-docs install + auto-commit ([c70c9c9](https://github.com/trustedshops-public/circleci-orb-terraform-utils/commit/c70c9c974e85035366025aa5de2e79acae160223))
+* drop terraform_ prefix from job names ([0e09966](https://github.com/trustedshops-public/circleci-orb-terraform-utils/commit/0e09966ad1bf531220a0e16d69d3662f0e37bc85))
+* **fmt:** add terraform_fmt job and fmt command with auto-commit ([dec19dc](https://github.com/trustedshops-public/circleci-orb-terraform-utils/commit/dec19dcdec21d44e06f41705663c3763a637aafb))
+* **git:** add git_push_changes shared command ([121c542](https://github.com/trustedshops-public/circleci-orb-terraform-utils/commit/121c542241bb2fce08d71131809679ec50b70e41))
+* **install:** add native install_terraform command with arch detection ([63c8b39](https://github.com/trustedshops-public/circleci-orb-terraform-utils/commit/63c8b39bf8d6544bf788f4edd24271f3501da1e0))
+* **lint:** add terraform_lint job with tflint install ([1b0d178](https://github.com/trustedshops-public/circleci-orb-terraform-utils/commit/1b0d17848b72bb039bdf23060d4a7773b2de10ad))
+* replace terraform wrap with native init/plan/apply commands and split jobs ([97fe158](https://github.com/trustedshops-public/circleci-orb-terraform-utils/commit/97fe1586d77c36ee0e5e0c23510635a3bf67b4ce))
+* **security:** add terraform_security_scan job with trivy ([e4d5a38](https://github.com/trustedshops-public/circleci-orb-terraform-utils/commit/e4d5a386d427220a5e944cc5c7ecd6821e6c4b1d))
+* **validate:** add terraform_validate job and validate command ([683b656](https://github.com/trustedshops-public/circleci-orb-terraform-utils/commit/683b65633e60ecae13538abc9ffcf47657d678be))
+
+
+### Bug Fixes
+
+* **git_push_changes:** resolve branch from CIRCLE_BRANCH at runtime ([a2181a6](https://github.com/trustedshops-public/circleci-orb-terraform-utils/commit/a2181a698893603ff69df2aa82f20eeb3402a15d))
+* **git_push:** scope bot git identity to the commit only ([8feda2b](https://github.com/trustedshops-public/circleci-orb-terraform-utils/commit/8feda2bdbfab0101074ab631b9bc4bc22f183380))
+* **scripts:** accept CircleCI's "1" serialisation for boolean params ([10a60ee](https://github.com/trustedshops-public/circleci-orb-terraform-utils/commit/10a60ee0adabb8add8e18c210f4ee30a9267fa3e))
+
+
+### Miscellaneous Chores
+
+* **deps:** drop circleci/terraform orb dependency ([9f9ec51](https://github.com/trustedshops-public/circleci-orb-terraform-utils/commit/9f9ec51225de8ebd907302507dfe8026cb7c7ad5))
+
+
+### Code Refactoring
+
+* **executor:** use cimg/base:stable instead of cimg/python ([125fc90](https://github.com/trustedshops-public/circleci-orb-terraform-utils/commit/125fc9073d528c5dc28c249fc3c43ace9ce68e2e))
+* **jobs:** drop terraform_apply_with_circleci_ip_range ([65c2a76](https://github.com/trustedshops-public/circleci-orb-terraform-utils/commit/65c2a76d8245e076b937717b8ac8fe6847f58e97))
+
 ## [4.0.0](https://github.com/trustedshops-public/circleci-orb-terraform-utils/compare/3.1.0...4.0.0) (2026-03-24)
 
 
