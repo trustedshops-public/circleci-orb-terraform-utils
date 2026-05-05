@@ -1,0 +1,16 @@
+description: >
+  Install terraform
+
+parameters:
+  version:
+    type: string
+    description: Version of terraform to install
+    # renovate: datasource=github-releases depName=hashicorp/terraform extractVersion=^v(?<version>.*)$
+    default: 1.10.5
+
+steps:
+  - run:
+      name: Install terraform
+      environment:
+        TERRAFORM_PARAM_VERSION: <<parameters.version>>
+      command: <<include(scripts/install_terraform.sh)>>

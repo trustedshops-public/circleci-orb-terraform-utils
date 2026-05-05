@@ -18,6 +18,7 @@ parameters:
 steps:
   - run:
       name: Initialize terrastate
-      command: |
-        cd <<parameters.path>>
-        terrastate --var-file <<parameters.var_file>>
+      environment:
+        TERRASTATE_PARAM_PATH: <<parameters.path>>
+        TERRASTATE_PARAM_VAR_FILE: <<parameters.var_file>>
+      command: <<include(scripts/terrastate_init.sh)>>

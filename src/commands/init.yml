@@ -1,0 +1,20 @@
+description: >
+  Run terraform init in the given module
+
+parameters:
+  path:
+    description: Path to the terraform module
+    default: .
+    type: string
+  cli_config_file:
+    description: Path to a terraform CLI config file
+    default: ''
+    type: string
+
+steps:
+  - run:
+      name: Terraform init
+      environment:
+        TERRAFORM_PARAM_PATH: <<parameters.path>>
+        TERRAFORM_PARAM_CLI_CONFIG_FILE: <<parameters.cli_config_file>>
+      command: <<include(scripts/init.sh)>>

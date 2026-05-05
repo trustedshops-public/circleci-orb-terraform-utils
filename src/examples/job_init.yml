@@ -1,0 +1,18 @@
+description: Standalone terraform init that persists .terraform/ to the workspace for downstream plan/apply jobs
+usage:
+  version: 2.1
+  orbs:
+    terraform-utils: trustedshops-public/terraform-utils@<version>
+  workflows:
+    plan_review_apply:
+      jobs:
+        - terraform-utils/init:
+            name: init
+            terraform_version: 1.10.5
+            path: terraform
+        - terraform-utils/plan:
+            name: plan
+            terraform_version: 1.10.5
+            path: terraform
+            var_file: vars/dev.tfvars
+            requires: [init]

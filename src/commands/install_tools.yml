@@ -14,26 +14,59 @@ parameters:
     description: Verion of terraform to install
     default: none
     type: string
+  terraform_docs_version:
+    description: Version of terraform-docs to install. Default "none" skips installation.
+    default: none
+    type: string
+  tflint_version:
+    description: Version of tflint to install. Default "none" skips installation.
+    default: none
+    type: string
+  trivy_version:
+    description: Version of trivy to install. Default "none" skips installation.
+    default: none
+    type: string
 
 steps:
   - unless:
       condition:
         and:
-          - equal: [ <<parameters.tfenv_version>>, "none" ]
+          - equal: [<<parameters.tfenv_version>>, "none"]
       steps:
         - install_tfenv:
             version: <<parameters.tfenv_version>>
   - unless:
       condition:
         and:
-          - equal: [ <<parameters.terrastate_version>>, "none" ]
+          - equal: [<<parameters.terrastate_version>>, "none"]
       steps:
         - install_terrastate:
             version: <<parameters.terrastate_version>>
   - unless:
       condition:
         and:
-          - equal: [ <<parameters.terraform_version>>, "none" ]
+          - equal: [<<parameters.terraform_version>>, "none"]
       steps:
-        - terraform/install:
-            terraform_version: <<parameters.terraform_version>>
+        - install_terraform:
+            version: <<parameters.terraform_version>>
+  - unless:
+      condition:
+        and:
+          - equal: [<<parameters.terraform_docs_version>>, "none"]
+      steps:
+        - install_terraform_docs:
+            version: <<parameters.terraform_docs_version>>
+  - unless:
+      condition:
+        and:
+          - equal: [<<parameters.tflint_version>>, "none"]
+      steps:
+        - install_tflint:
+            version: <<parameters.tflint_version>>
+  - unless:
+      condition:
+        and:
+          - equal: [<<parameters.trivy_version>>, "none"]
+      steps:
+        - install_trivy:
+            version: <<parameters.trivy_version>>

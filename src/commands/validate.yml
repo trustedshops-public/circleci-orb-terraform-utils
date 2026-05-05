@@ -1,0 +1,22 @@
+description: >
+  Run `terraform validate` on the given module. Performs a backend-less
+  init first (terraform init -backend=false) so providers are available
+  without configuring or contacting any state backend.
+
+parameters:
+  path:
+    description: Path to the terraform module
+    default: .
+    type: string
+  cli_config_file:
+    description: Path to a terraform CLI config file
+    default: ''
+    type: string
+
+steps:
+  - run:
+      name: Terraform validate
+      environment:
+        TERRAFORM_PARAM_PATH: <<parameters.path>>
+        TERRAFORM_PARAM_CLI_CONFIG_FILE: <<parameters.cli_config_file>>
+      command: <<include(scripts/validate.sh)>>

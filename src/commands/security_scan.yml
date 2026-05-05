@@ -1,0 +1,39 @@
+description: >
+  Scan terraform files for security misconfigurations using trivy config.
+
+parameters:
+  path:
+    description: Path to scan (terraform module directory or file)
+    default: .
+    type: string
+  severity:
+    description: >
+      Comma-separated list of severities that should be reported.
+      e.g. "CRITICAL", "HIGH,CRITICAL". Empty reports all severities.
+    default: "HIGH,CRITICAL"
+    type: string
+  exit_on_finding:
+    description: >
+      When true (default), exit non-zero if any finding at the given
+      severity is reported, failing the job. When false, trivy reports
+      but exits 0.
+    default: true
+    type: boolean
+  config_file:
+    description: >
+      Path to a trivy.yaml config file. When empty, trivy auto-discovers
+      a `trivy.yaml` in the current working directory (the workspace
+      root). CLI parameters (severity, exit_on_finding) override values
+      set in the config file.
+    default: ''
+    type: string
+
+steps:
+  - run:
+      name: Trivy security scan
+      environment:
+        TRIVY_PARAM_PATH: <<parameters.path>>
+        TRIVY_PARAM_SEVERITY: <<parameters.severity>>
+        TRIVY_PARAM_EXIT_ON_FINDING: <<parameters.exit_on_finding>>
+        TRIVY_PARAM_CONFIG_FILE: <<parameters.config_file>>
+      command: <<include(scripts/security_scan.sh)>>

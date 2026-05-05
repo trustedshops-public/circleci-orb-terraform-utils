@@ -1,0 +1,30 @@
+description: |
+  Generate or check terraform-docs README. Default mode fails when README is out of date; flip auto_commit to true to push the regenerated docs back automatically.
+usage:
+  version: 2.1
+  orbs:
+    terraform-utils: trustedshops-public/terraform-utils@<version>
+  workflows:
+    pr_checks:
+      jobs:
+        - terraform-utils/docs:
+            name: docs-check
+            terraform_docs_version: v0.20.0
+            path: terraform
+            output_file: README.md
+            config_file: .terraform-docs.yml
+            auto_commit: true
+            git_user_name: "etrusted-bot"
+            git_user_email: "32764267+etrusted-bot@users.noreply.github.com"
+            pre_commit_steps:
+              - run:
+                  name: Configure git remote with token
+                  command: |
+                    git remote set-url origin "https://etrusted-bot:${GITHUB_TOKEN}@github.com/trustedshops/${CIRCLE_PROJECT_REPONAME}.git"
+            context:
+              - github-release
+            filters:
+              branches:
+                ignore:
+                  - main
+                  - master

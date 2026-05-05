@@ -1,0 +1,141 @@
+description: >
+  Apply a terraform module: install tools, initialize, plan, apply.
+
+  Uses a saved plan (-out=tfplan) so apply applies exactly the plan that was
+  produced earlier in the same job, with no possibility of drift.
+
+executor: default
+
+environment:
+  TF_IN_AUTOMATION: 1
+
+parameters:
+  tfenv_version:
+    description: Version of tfenv to install. Default "none" skips installation.
+    default: none
+    type: string
+  terrastate_version:
+    description: Version of terrastate to install. Default "none" skips installation.
+    default: none
+    type: string
+  terraform_version:
+    description: Version of terraform to install. Default "none" skips installation.
+    default: none
+    type: string
+  path:
+    description: Path to terraform module
+    default: .
+    type: string
+  var_file:
+    description: >
+      Variable file to pass via -var-file. When empty (default), the flag is
+      omitted entirely. Set explicitly to "vars.tfvars" for the previous
+      orb default behavior.
+    default: ''
+    type: string
+  cli_config_file:
+    description: Path to a terraform CLI config file
+    default: ''
+    type: string
+  pre_init_steps:
+    type: steps
+    description: Steps to execute before `terraform init`
+    default: []
+  pre_plan_steps:
+    type: steps
+    description: Steps to execute after `terraform init` and before `terraform plan`
+    default: []
+  pre_apply_steps:
+    type: steps
+    description: Steps to execute after `terraform plan` and before `terraform apply`
+    default: []
+  post_apply_steps:
+    type: steps
+    description: Steps to execute after `terraform apply`
+    default: []
+  rewrite_github_clone_url:
+    type: boolean
+    default: false
+    description: Rewrite git urls for github to use https with env var GITHUB_TOKEN
+  enable_cache:
+    type: boolean
+    default: false
+    description: >
+      Cache terraform providers between builds. Requires
+      .terraform.lock.hcl to be committed in the module path. Projects
+      without a lockfile must keep enable_cache: false (the default).
+  attach_workspace:
+    default: true
+    description: Boolean for whether or not to attach to an existing workspace.
+    type: boolean
+  checkout:
+    default: true
+    description: Boolean for whether or not to checkout sources
+    type: boolean
+  workspace_root:
+    default: .
+    description: Workspace root path that is either an absolute path or a path relative to the working directory.
+    type: string
+
+steps:
+  - when:
+      condition: <<parameters.checkout>>
+      steps:
+        - checkout
+  - when:
+      condition: <<parameters.attach_workspace>>
+      steps:
+        - attach_workspace:
+            at: <<parameters.workspace_root>>
+  - install_tools:
+      tfenv_version: <<parameters.tfenv_version>>
+      terrastate_version: <<parameters.terrastate_version>>
+      terraform_version: <<parameters.terraform_version>>
+  - unless:
+      condition:
+        and:
+          - equal: [<<parameters.terrastate_version>>, "none"]
+      steps:
+        - terrastate_init:
+            path: <<parameters.path>>
+            cli_config_file: <<parameters.cli_config_file>>
+            var_file: <<parameters.var_file>>
+  - when:
+      condition: <<parameters.rewrite_github_clone_url>>
+      steps:
+        - github-utils/rewrite_urls_with_token
+  - unless:
+      condition:
+        and:
+          - equal: [<<parameters.tfenv_version>>, "none"]
+      steps:
+        - run:
+            name: Install terraform version for module
+            environment:
+              TFENV_PARAM_PATH: <<parameters.path>>
+            command: <<include(scripts/tfenv_install_module_version.sh)>>
+  - <<parameters.pre_init_steps>>
+  - when:
+      condition: <<parameters.enable_cache>>
+      steps:
+        - restore_provider_cache:
+            path: <<parameters.path>>
+  - init:
+      path: <<parameters.path>>
+      cli_config_file: <<parameters.cli_config_file>>
+  - when:
+      condition: <<parameters.enable_cache>>
+      steps:
+        - save_provider_cache:
+            path: <<parameters.path>>
+  - <<parameters.pre_plan_steps>>
+  - plan:
+      path: <<parameters.path>>
+      var_file: <<parameters.var_file>>
+      cli_config_file: <<parameters.cli_config_file>>
+  - <<parameters.pre_apply_steps>>
+  - apply:
+      path: <<parameters.path>>
+      var_file: <<parameters.var_file>>
+      cli_config_file: <<parameters.cli_config_file>>
+  - <<parameters.post_apply_steps>>

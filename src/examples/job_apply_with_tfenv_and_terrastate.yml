@@ -7,11 +7,16 @@ usage:
     version: 2
     continuous:
       jobs:
-        - terraform-utils/terraform_apply:
+        - terraform-utils/apply:
             name: deploy-prod
-            terraform_version: 1.9.7
+            tfenv_version: v3.0.0
+            terrastate_version: 2.2.1
             path: terraform
             var_file: vars/prod.tfvars
+            post_apply_steps:
+              - run:
+                  name: Notify about deployment
+                  command: .circleci/notify-deployment.sh prod
             filters:
               branches:
-                only: [ main ]
+                only: [main]

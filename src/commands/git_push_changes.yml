@@ -1,0 +1,64 @@
+description: >
+  Configure git identity, stage paths, commit, and push to the current branch.
+
+  Refuses to push to main/master (configurable). Assumes git credentials
+  (origin URL with auth token, or SSH user key) are already configured by
+  the caller before this command runs - this command does NOT touch the
+  origin URL.
+
+  Typical usage: a fmt or docs job auto-fixes formatting/output, calls this
+  command to commit and push the fix back, and then fails so CI re-runs
+  against the corrected HEAD.
+
+parameters:
+  git_user_name:
+    type: string
+    description: Git author/committer name (e.g. "etrusted-bot")
+  git_user_email:
+    type: string
+    description: >
+      Git author/committer email. Recommended: a noreply or org bot
+      address (e.g. "32764267+etrusted-bot@users.noreply.github.com").
+  commit_message:
+    type: string
+    description: Commit message
+  paths_to_add:
+    type: string
+    default: "."
+    description: >
+      Paths to git add. Passed verbatim to `git add` with intentional word
+      splitting, so multiple paths can be space-separated.
+  branch:
+    type: string
+    default: ""
+    description: >
+      Branch to push to. When empty (default), uses CircleCI's
+      CIRCLE_BRANCH env var at runtime (the current branch).
+      CCI parameter defaults do not bash-expand `${...}`, which is why
+      this can't have CIRCLE_BRANCH as the literal default.
+  protected_branches:
+    type: string
+    default: "main master"
+    description: >
+      Space-separated list of branch names this command refuses to push
+      to. Defaults to "main master".
+  fail_if_changes:
+    type: boolean
+    default: true
+    description: >
+      When true (default), if changes were staged, committed, and pushed,
+      the job fails (exit 1) so CI re-runs against the new HEAD. When
+      false, the job succeeds quietly after pushing.
+
+steps:
+  - run:
+      name: Push changes back to origin
+      environment:
+        GIT_PUSH_PARAM_USER_NAME: <<parameters.git_user_name>>
+        GIT_PUSH_PARAM_USER_EMAIL: <<parameters.git_user_email>>
+        GIT_PUSH_PARAM_COMMIT_MESSAGE: <<parameters.commit_message>>
+        GIT_PUSH_PARAM_PATHS: <<parameters.paths_to_add>>
+        GIT_PUSH_PARAM_BRANCH: <<parameters.branch>>
+        GIT_PUSH_PARAM_PROTECTED_BRANCHES: <<parameters.protected_branches>>
+        GIT_PUSH_PARAM_FAIL_IF_CHANGES: <<parameters.fail_if_changes>>
+      command: <<include(scripts/git_push_changes.sh)>>

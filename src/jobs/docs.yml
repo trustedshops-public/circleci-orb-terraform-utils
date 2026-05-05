@@ -1,0 +1,140 @@
+description: >
+  Generate or check terraform module documentation using terraform-docs.
+
+  Default behavior (auto_commit: false): runs with --output-check and
+  fails the job if the output file is out of date with the current .tf
+  files. Suitable as a fast PR gate.
+
+  When auto_commit: true, regenerates the docs in place, then commits
+  and pushes the changes back via the git_push_changes helper. Refuses
+  to push to main/master. Requires git authentication to be configured
+  by the caller (see pre_commit_steps).
+
+executor: default
+
+parameters:
+  terraform_docs_version:
+    description: Version of terraform-docs to install (e.g. v0.20.0)
+    # renovate: datasource=github-releases depName=terraform-docs/terraform-docs
+    default: v0.20.0
+    type: string
+  path:
+    description: Path to the terraform module
+    default: .
+    type: string
+  format:
+    description: >
+      terraform-docs format. Single word ("markdown") or sub-formatted
+      ("markdown table", "markdown document").
+    default: "markdown table"
+    type: string
+  output_file:
+    description: File (relative to module path) for docs output. Empty writes to stdout.
+    default: README.md
+    type: string
+  config_file:
+    description: Path to .terraform-docs.yml. Empty uses built-in defaults.
+    default: ''
+    type: string
+  auto_commit:
+    type: boolean
+    default: false
+    description: >
+      When false (default), runs with --output-check and fails on stale
+      docs. When true, regenerates the docs in place, commits the
+      result, and pushes via git_push_changes. Requires git_user_name,
+      git_user_email, and git authentication to be configured by the
+      caller (see pre_commit_steps).
+  git_user_name:
+    type: string
+    default: ''
+    description: Git author/committer name (required when auto_commit is true).
+  git_user_email:
+    type: string
+    default: ''
+    description: Git author/committer email (required when auto_commit is true).
+  commit_message:
+    type: string
+    default: "chore: update terraform-docs"
+    description: Commit message used when auto_commit is true.
+  protected_branches:
+    type: string
+    default: "main master"
+    description: Space-separated branch names the auto-commit will refuse to push to.
+  fail_if_changes:
+    type: boolean
+    default: true
+    description: >
+      When auto_commit is true and changes were pushed, fail the job
+      so CI re-runs against the new HEAD. When false, succeed quietly
+      after pushing.
+  pre_docs_steps:
+    type: steps
+    description: Steps to execute before terraform-docs runs
+    default: []
+  pre_commit_steps:
+    type: steps
+    description: >
+      Steps to execute after terraform-docs and before git_push_changes,
+      only when auto_commit is true. Typical use: configure git auth.
+    default: []
+  rewrite_github_clone_url:
+    type: boolean
+    default: false
+    description: Rewrite git urls for github to use https with env var GITHUB_TOKEN
+  attach_workspace:
+    default: true
+    description: Boolean for whether or not to attach to an existing workspace.
+    type: boolean
+  checkout:
+    default: true
+    description: Boolean for whether or not to checkout sources
+    type: boolean
+  workspace_root:
+    default: .
+    description: Workspace root path that is either an absolute path or a path relative to the working directory.
+    type: string
+
+steps:
+  - when:
+      condition: <<parameters.checkout>>
+      steps:
+        - checkout
+  - when:
+      condition: <<parameters.attach_workspace>>
+      steps:
+        - attach_workspace:
+            at: <<parameters.workspace_root>>
+  - install_terraform_docs:
+      version: <<parameters.terraform_docs_version>>
+  - when:
+      condition: <<parameters.rewrite_github_clone_url>>
+      steps:
+        - github-utils/rewrite_urls_with_token
+  - <<parameters.pre_docs_steps>>
+  - when:
+      condition: <<parameters.auto_commit>>
+      steps:
+        - docs:
+            path: <<parameters.path>>
+            format: <<parameters.format>>
+            output_file: <<parameters.output_file>>
+            config_file: <<parameters.config_file>>
+            check: false
+        - <<parameters.pre_commit_steps>>
+        - git_push_changes:
+            git_user_name: <<parameters.git_user_name>>
+            git_user_email: <<parameters.git_user_email>>
+            commit_message: <<parameters.commit_message>>
+            paths_to_add: <<parameters.path>>
+            protected_branches: <<parameters.protected_branches>>
+            fail_if_changes: <<parameters.fail_if_changes>>
+  - unless:
+      condition: <<parameters.auto_commit>>
+      steps:
+        - docs:
+            path: <<parameters.path>>
+            format: <<parameters.format>>
+            output_file: <<parameters.output_file>>
+            config_file: <<parameters.config_file>>
+            check: true

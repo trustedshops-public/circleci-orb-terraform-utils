@@ -1,0 +1,74 @@
+description: >
+  Lint a terraform module with tflint.
+
+  Installs tflint, runs `tflint --init` to download any plugins
+  declared in .tflint.hcl, then runs the linter. Fails the job if
+  tflint reports any issues.
+
+executor: default
+
+parameters:
+  tflint_version:
+    description: Version of tflint to install (e.g. v0.62.0)
+    # renovate: datasource=github-releases depName=terraform-linters/tflint
+    default: v0.62.0
+    type: string
+  path:
+    description: Path to the terraform module
+    default: .
+    type: string
+  config_file:
+    description: Path to a .tflint.hcl config file. Empty uses tflint's default lookup.
+    default: ''
+    type: string
+  recursive:
+    description: Recurse into subdirectories when running tflint
+    default: false
+    type: boolean
+  pre_lint_steps:
+    type: steps
+    description: Steps to execute before tflint
+    default: []
+  post_lint_steps:
+    type: steps
+    description: Steps to execute after tflint
+    default: []
+  rewrite_github_clone_url:
+    type: boolean
+    default: false
+    description: Rewrite git urls for github to use https with env var GITHUB_TOKEN
+  attach_workspace:
+    default: true
+    description: Boolean for whether or not to attach to an existing workspace.
+    type: boolean
+  checkout:
+    default: true
+    description: Boolean for whether or not to checkout sources
+    type: boolean
+  workspace_root:
+    default: .
+    description: Workspace root path that is either an absolute path or a path relative to the working directory.
+    type: string
+
+steps:
+  - when:
+      condition: <<parameters.checkout>>
+      steps:
+        - checkout
+  - when:
+      condition: <<parameters.attach_workspace>>
+      steps:
+        - attach_workspace:
+            at: <<parameters.workspace_root>>
+  - install_tflint:
+      version: <<parameters.tflint_version>>
+  - when:
+      condition: <<parameters.rewrite_github_clone_url>>
+      steps:
+        - github-utils/rewrite_urls_with_token
+  - <<parameters.pre_lint_steps>>
+  - lint:
+      path: <<parameters.path>>
+      config_file: <<parameters.config_file>>
+      recursive: <<parameters.recursive>>
+  - <<parameters.post_lint_steps>>
