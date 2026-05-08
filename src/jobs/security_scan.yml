@@ -5,9 +5,13 @@ description: >
   Fails the job by default if any finding at the given severity
   threshold (default HIGH and CRITICAL) is reported.
 
-executor: default
+executor: <<parameters.executor>>
 
 parameters:
+  executor:
+    description: Executor to run the job on
+    default: default
+    type: executor
   trivy_version:
     description: Version of trivy to install (e.g. v0.70.0)
     # renovate: datasource=github-releases depName=aquasecurity/trivy

@@ -10,9 +10,13 @@ description: >
   to push to main/master. Requires git authentication to be configured
   by the caller (see pre_commit_steps).
 
-executor: default
+executor: <<parameters.executor>>
 
 parameters:
+  executor:
+    description: Executor to run the job on
+    default: default
+    type: executor
   terraform_docs_version:
     description: Version of terraform-docs to install (e.g. v0.20.0)
     # renovate: datasource=github-releases depName=terraform-docs/terraform-docs
