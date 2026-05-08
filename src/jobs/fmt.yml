@@ -10,12 +10,16 @@ description: >
   Requires git authentication to be configured (typically via
   github-utils/rewrite_urls_with_token in pre_commit_steps).
 
-executor: default
+executor: <<parameters.executor>>
 
 environment:
   TF_IN_AUTOMATION: 1
 
 parameters:
+  executor:
+    description: Executor to run the job on
+    default: default
+    type: executor
   tfenv_version:
     description: Version of tfenv to install. Default "none" skips installation.
     default: none

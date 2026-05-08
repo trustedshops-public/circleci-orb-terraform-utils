@@ -5,9 +5,13 @@ description: >
   declared in .tflint.hcl, then runs the linter. Fails the job if
   tflint reports any issues.
 
-executor: default
+executor: <<parameters.executor>>
 
 parameters:
+  executor:
+    description: Executor to run the job on
+    default: default
+    type: executor
   tflint_version:
     description: Version of tflint to install (e.g. v0.62.0)
     # renovate: datasource=github-releases depName=terraform-linters/tflint

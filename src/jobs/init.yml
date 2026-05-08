@@ -3,12 +3,16 @@ description: >
   persist the resulting .terraform/ directory to the CircleCI workspace so
   downstream jobs can reuse providers and backend config without re-running init.
 
-executor: default
+executor: <<parameters.executor>>
 
 environment:
   TF_IN_AUTOMATION: 1
 
 parameters:
+  executor:
+    description: Executor to run the job on
+    default: default
+    type: executor
   tfenv_version:
     description: Version of tfenv to install. Default "none" skips installation.
     default: none

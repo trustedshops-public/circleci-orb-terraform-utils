@@ -6,12 +6,16 @@ description: >
   with a custom step that calls `terraform plan -destroy`, then apply
   the persisted tfplan via the `apply` job.
 
-executor: default
+executor: <<parameters.executor>>
 
 environment:
   TF_IN_AUTOMATION: 1
 
 parameters:
+  executor:
+    description: Executor to run the job on
+    default: default
+    type: executor
   tfenv_version:
     description: Version of tfenv to install. Default "none" skips installation.
     default: none
