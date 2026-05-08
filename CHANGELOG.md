@@ -1,3 +1,10 @@
+## [5.1.0](https://github.com/trustedshops-public/circleci-orb-terraform-utils/compare/5.0.0...5.1.0) (2026-05-08)
+
+
+### Features
+
+* **jobs:** make executor configurable via parameter ([a5fc1de](https://github.com/trustedshops-public/circleci-orb-terraform-utils/commit/a5fc1deaa9d4f8eb2260b014e079f3aeace1a113))
+
 ## [5.0.0](https://github.com/trustedshops-public/circleci-orb-terraform-utils/compare/4.0.0...5.0.0) (2026-05-05)
 
 
