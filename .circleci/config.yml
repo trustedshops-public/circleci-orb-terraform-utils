@@ -86,8 +86,7 @@ workflows:
           context:
             - circleci-orbs
       - publish:
-          <<: *require_tests
-          <<: *filter_tags
+          <<: [*require_tests, *filter_tags]
           context:
             - circleci-orbs
       - semantic-release/with_changelog_github_config:
