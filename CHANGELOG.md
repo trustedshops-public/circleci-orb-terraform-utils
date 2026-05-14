@@ -1,3 +1,9 @@
+## [5.1.2](https://github.com/trustedshops-public/circleci-orb-terraform-utils/compare/5.1.1...5.1.2) (2026-05-14)
+
+### Bug Fixes
+
+* **ci:** install aws-cli before s3 upload (aws-s3 v4 dropped bundled cli) ([0326951](https://github.com/trustedshops-public/circleci-orb-terraform-utils/commit/0326951a316658b9d95d2b6a0607254ab5d8ded5))
+
 ## [5.1.1](https://github.com/trustedshops-public/circleci-orb-terraform-utils/compare/5.1.0...5.1.1) (2026-05-14)
 
 
