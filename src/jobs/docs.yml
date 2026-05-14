@@ -20,7 +20,7 @@ parameters:
   terraform_docs_version:
     description: Version of terraform-docs to install (e.g. v0.20.0)
     # renovate: datasource=github-releases depName=terraform-docs/terraform-docs
-    default: v0.20.0
+    default: v0.24.0
     type: string
   path:
     description: Path to the terraform module
