@@ -1,3 +1,10 @@
+## [5.1.1](https://github.com/trustedshops-public/circleci-orb-terraform-utils/compare/5.1.0...5.1.1) (2026-05-14)
+
+
+### Bug Fixes
+
+* **renovate:** repair custom-manager regex and circle ci yaml ([175a20c](https://github.com/trustedshops-public/circleci-orb-terraform-utils/commit/175a20ceca9f883e4ac141aa4dccc2c05162bd29))
+
 ## [5.1.0](https://github.com/trustedshops-public/circleci-orb-terraform-utils/compare/5.0.0...5.1.0) (2026-05-08)
 
 
