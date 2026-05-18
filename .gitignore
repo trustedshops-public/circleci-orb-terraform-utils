@@ -1,2 +1,6 @@
 .idea/
 .vscode/
+
+# Test resources
+.terraform/
+.terraform.lock.hcl
