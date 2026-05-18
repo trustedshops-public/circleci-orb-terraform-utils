@@ -1,5 +1,7 @@
 version: 2.1
 
+setup: true
+
 .filter_all: &filter_all
   filters:
     branches:
