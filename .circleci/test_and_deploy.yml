@@ -58,27 +58,24 @@ jobs:
     executor: <orb-name>/default
     steps:
       - checkout
+      - <orb-name>/install_terraform
       - <orb-name>/init:
           path: ./test
-          terraform_version: 1.10.5
       - <orb-name>/validate:
           path: ./test
-          terraform_version: 1.10.5
       - <orb-name>/fmt:
           path: ./test
-          terraform_version: 1.10.5
+      - <orb-name>/install_tflint
       - <orb-name>/lint:
           path: ./test
-          tflint_version: v0.62.1
+      - <orb-name>/install_terraform_docs
       - <orb-name>/docs:
           path: ./test
-          terraform_docs_version: v0.24.0
+      - <orb-name>/install_trivy
       - <orb-name>/security_scan:
           path: ./test
-          trivy_version: v0.70.0
       - <orb-name>/plan:
           path: ./test
-          terraform_version: 1.10.5
 
   publish-dev:
     executor: circleci-cli/default
