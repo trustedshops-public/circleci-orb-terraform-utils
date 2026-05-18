@@ -69,13 +69,13 @@ jobs:
           terraform_version: 1.10.5
       - <orb-name>/lint:
           path: ./test
-          terraform_version: 1.10.5
+          tflint_version: v0.62.1
       - <orb-name>/docs:
           path: ./test
-          terraform_version: 1.10.5
+          terraform_docs_version: v0.24.0
       - <orb-name>/security_scan:
           path: ./test
-          terraform_version: 1.10.5
+          trivy_version: v0.70.0
       - <orb-name>/plan:
           path: ./test
           terraform_version: 1.10.5
