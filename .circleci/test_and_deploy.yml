@@ -76,6 +76,10 @@ jobs:
           path: ./test
       - <orb-name>/plan:
           path: ./test
+      - <orb-name>/apply:
+          path: ./test
+      - <orb-name>/destroy:
+          path: ./test
 
   publish-dev:
     executor: circleci-cli/default
