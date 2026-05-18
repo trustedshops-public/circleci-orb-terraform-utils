@@ -60,18 +60,25 @@ jobs:
       - checkout
       - <orb-name>/init:
           path: ./test
+          terraform_version: 1.10.5
       - <orb-name>/validate:
           path: ./test
+          terraform_version: 1.10.5
       - <orb-name>/fmt:
           path: ./test
+          terraform_version: 1.10.5
       - <orb-name>/lint:
           path: ./test
+          terraform_version: 1.10.5
       - <orb-name>/docs:
           path: ./test
+          terraform_version: 1.10.5
       - <orb-name>/security_scan:
           path: ./test
+          terraform_version: 1.10.5
       - <orb-name>/plan:
           path: ./test
+          terraform_version: 1.10.5
 
   publish-dev:
     executor: circleci-cli/default
