@@ -1,8 +1,14 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "local>trustedshops-public/.github:renovate-config"
+    "github>trustedshops-public/.github:renovate-config"
   ],
+  "circleci": {
+    "managerFilePatterns": [
+      "/(^|/)\\.circleci/.+\\.ya?ml$/",
+      "src/**/*.yml"
+    ]
+  },
   "customManagers": [
     {
       "customType": "regex",
