@@ -8,7 +8,7 @@ parameters:
       Version of tflint to install. Use the upstream tag form including
       the v prefix, e.g. "v0.62.0".
     # renovate: datasource=github-releases depName=terraform-linters/tflint
-    default: v0.63.1
+    default: v0.64.0
 
 steps:
   - run:
