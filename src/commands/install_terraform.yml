@@ -6,7 +6,7 @@ parameters:
     type: string
     description: Version of terraform to install
     # renovate: datasource=github-releases depName=hashicorp/terraform extractVersion=^v(?<version>.*)$
-    default: 1.15.8
+    default: 1.16.2
 
 steps:
   - run:
