@@ -1,3 +1,15 @@
+## [6.0.0](https://github.com/trustedshops-public/circleci-orb-terraform-utils/compare/5.2.0...6.0.0) (2026-11-25)
+
+### ⚠ BREAKING CHANGES
+
+* **plan:** tfplan moves from the workspace root to <path>/tfplan.
+
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+### Features
+
+* **plan:** persist tfplan per module and reuse it in apply ([ea89fd6](https://github.com/trustedshops-public/circleci-orb-terraform-utils/commit/ea89fd6ca34bcde915fc89e00e64d6ef2d4a1ba3))
+
 ## [5.1.2](https://github.com/trustedshops-public/circleci-orb-terraform-utils/compare/5.1.1...5.1.2) (2026-05-14)
 
 ### Bug Fixes
