@@ -1,8 +1,9 @@
 description: >
   Apply a terraform module: install tools, initialize, plan, apply.
 
-  Uses a saved plan (-out=tfplan) so apply applies exactly the plan that was
-  produced earlier in the same job, with no possibility of drift.
+  Applies <path>/tfplan when the attached workspace carries one (persisted by
+  the plan job), so exactly the approved plan is applied. Otherwise plans
+  (-out=tfplan) in the same job and applies that plan.
 
 executor: <<parameters.executor>>
 
@@ -137,6 +138,7 @@ steps:
       path: <<parameters.path>>
       var_file: <<parameters.var_file>>
       cli_config_file: <<parameters.cli_config_file>>
+      reuse_existing_plan: true
   - <<parameters.pre_apply_steps>>
   - apply:
       path: <<parameters.path>>

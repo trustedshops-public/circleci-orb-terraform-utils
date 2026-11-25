@@ -1,5 +1,23 @@
 # Migration Guide
 
+## v5 → v6
+
+### `plan` persists `<path>/tfplan`, `apply` reuses it
+
+The `plan` job used to persist `tfplan` at the workspace root, so parallel plan
+jobs clashed ("Concurrent upstream jobs persisted the same file(s)") and the
+`apply` job never found the file in `<path>`. `plan` now persists
+`<path>/tfplan` (relative to the working directory, so `path` must be relative),
+and `apply` skips its own plan when that file is attached from the workspace, so
+the approved plan is the one applied.
+
+Action required:
+
+- Anything that read `./tfplan` from the workspace must read `<path>/tfplan`.
+- An `apply` job that attaches the workspace of a plan for a *different*
+  environment will now try to apply that plan. Delete the stale
+  `<path>/tfplan` (e.g. in `pre_plan_steps`) or do not attach it.
+
 ## v4 → v5
 
 v5 is a breaking refactor. The orb is now self-contained for terraform

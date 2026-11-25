@@ -16,6 +16,13 @@ parameters:
     description: Path to a terraform CLI config file
     default: ''
     type: string
+  reuse_existing_plan:
+    description: >
+      Skip planning when <path>/tfplan already exists (e.g. attached from the
+      workspace after a manual approval), so the apply uses exactly the plan
+      that was approved.
+    default: false
+    type: boolean
 
 steps:
   - run:
@@ -24,4 +31,5 @@ steps:
         TERRAFORM_PARAM_PATH: <<parameters.path>>
         TERRAFORM_PARAM_VAR_FILE: <<parameters.var_file>>
         TERRAFORM_PARAM_CLI_CONFIG_FILE: <<parameters.cli_config_file>>
+        TERRAFORM_PARAM_REUSE_EXISTING_PLAN: <<parameters.reuse_existing_plan>>
       command: <<include(scripts/plan.sh)>>
