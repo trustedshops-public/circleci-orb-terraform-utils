@@ -15,4 +15,10 @@ if [[ -n "${TERRAFORM_PARAM_VAR_FILE}" ]]; then
 fi
 
 cd "${TERRAFORM_PARAM_PATH}"
+
+if [[ ( "${TERRAFORM_PARAM_REUSE_EXISTING_PLAN}" == "1" || "${TERRAFORM_PARAM_REUSE_EXISTING_PLAN}" == "true" ) && -f tfplan ]]; then
+  echo "Reusing existing tfplan in ${TERRAFORM_PARAM_PATH}; skipping terraform plan"
+  exit 0
+fi
+
 terraform plan -input=false -out=tfplan "${PLAN_ARGS[@]}"
